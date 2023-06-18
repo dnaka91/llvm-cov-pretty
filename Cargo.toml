@@ -1,0 +1,59 @@
+[package]
+name = "llvm-cov-pretty"
+version = "0.1.0"
+authors = ["Dominik Nakamura <dnaka91@gmail.com>"]
+edition = "2021"
+description = "More beautiful HTML reports for llvm-cov/cargo-llvm-cov"
+readme = "README.md"
+homepage = "https://github.com/dnaka91/llvm-cov-pretty"
+repository = "https://github.com/dnaka91/llvm-cov-pretty"
+license = "AGPL-3.0-only"
+keywords = ["coverage", "llvm-cov", "testing", "reporting"]
+categories = [
+    "command-line-utilities",
+    "development-tools",
+    "development-tools::testing",
+    "visualization",
+]
+include = [
+    "/assets/themes/**/*.tmTheme",
+    "/assets/style.css",
+    "/src/**/*",
+    "/templates/**/*",
+    "/build.rs",
+    "/LICENSE",
+    "/README.md",
+]
+
+[dependencies]
+anyhow = "1.0.71"
+askama = { version = "0.12.0", default-features = false }
+camino = { version = "1.1.4", features = ["serde1"] }
+clap = { version = "4.3.4", features = ["derive"] }
+clap_complete = "4.3.1"
+clap_mangen = "0.2.12"
+ignore = "0.4.20"
+minify-html = "0.11.1"
+rustc-demangle = "0.1.23"
+serde = { version = "1.0.164", features = ["derive"] }
+serde_json = "1.0.97"
+time = { version = "0.3.22", features = ["formatting", "local-offset", "macros"] }
+
+[dependencies.syntect]
+version = "5.0.0"
+default-features = false
+features = ["default-syntaxes", "parsing", "regex-fancy"]
+
+[build-dependencies]
+css-minify = "0.3.1"
+heck = "0.4.1"
+quote = "1.0.28"
+
+[build-dependencies.syntect]
+version = "5.0.0"
+default-features = false
+features = ["default-themes", "html", "plist-load", "regex-fancy"]
+
+[profile.release]
+lto = true
+strip = true

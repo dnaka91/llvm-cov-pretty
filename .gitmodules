@@ -1,0 +1,43 @@
+[submodule "assets/themes/1337-Scheme"]
+	path = assets/themes/1337-Scheme
+	url = https://github.com/MarkMichos/1337-Scheme
+[submodule "assets/themes/Coldark"]
+	path = assets/themes/Coldark
+	url = https://github.com/ArmandPhilippot/coldark-bat
+[submodule "assets/themes/DarkNeon"]
+	path = assets/themes/DarkNeon
+	url = https://github.com/RainyDayMedia/DarkNeon
+[submodule "assets/themes/dracula-sublime"]
+	path = assets/themes/dracula-sublime
+	url = https://github.com/dracula/sublime
+[submodule "assets/themes/github-sublime-theme"]
+	path = assets/themes/github-sublime-theme
+	url = https://github.com/AlexanderEkdahl/github-sublime-theme
+[submodule "assets/themes/gruvbox"]
+	path = assets/themes/gruvbox
+	url = https://github.com/subnut/gruvbox-tmTheme
+	branch = bat-source
+[submodule "assets/themes/Nord-sublime"]
+	path = assets/themes/Nord-sublime
+	url = https://github.com/crabique/Nord-plist
+[submodule "assets/themes/onehalf"]
+	path = assets/themes/onehalf
+	url = https://github.com/sonph/onehalf
+[submodule "assets/themes/Solarized"]
+	path = assets/themes/Solarized
+	url = https://github.com/braver/Solarized
+[submodule "assets/themes/sublime-monokai-extended"]
+	path = assets/themes/sublime-monokai-extended
+	url = https://github.com/jonschlinkert/sublime-monokai-extended
+[submodule "assets/themes/sublime-snazzy"]
+	path = assets/themes/sublime-snazzy
+	url = https://github.com/greggb/sublime-snazzy
+[submodule "assets/themes/TwoDark"]
+	path = assets/themes/TwoDark
+	url = https://github.com/erremauro/TwoDark
+[submodule "assets/themes/visual-studio-dark-plus"]
+	path = assets/themes/visual-studio-dark-plus
+	url = https://github.com/vidann1/visual-studio-dark-plus
+[submodule "assets/themes/zenburn"]
+	path = assets/themes/zenburn
+	url = https://github.com/colinta/zenburn

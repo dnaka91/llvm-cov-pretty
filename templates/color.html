@@ -1,0 +1,16 @@
+{% let color_text %}
+{% let color_bg %}
+{% match percent|coverage_level %}
+  {% when CoverageLevel::VeryHigh %}
+    {% let color_text = "level-text-veryhigh" %}
+    {% let color_bg = "level-bg-veryhigh" %}
+  {% when CoverageLevel::High %}
+    {% let color_text = "level-text-high" %}
+    {% let color_bg = "level-bg-high" %}
+  {% when CoverageLevel::Medium %}
+    {% let color_text = "level-text-medium" %}
+    {% let color_bg = "level-bg-medium" %}
+  {% when CoverageLevel::Low %}
+    {% let color_text = "level-text-low" %}
+    {% let color_bg = "level-bg-low" %}
+{% endmatch %}

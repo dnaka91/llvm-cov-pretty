@@ -1,0 +1,16 @@
+{
+  "name": "llvm-cov-pretty",
+  "version": "1.0.0",
+  "main": "index.css",
+  "author": "Dominik Nakamura <dnaka91@gmail.com>",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "tailwind": "tailwindcss -i ./assets/index.css -o ./assets/style.css",
+    "watch": "yarn run tailwind --watch",
+    "build": "yarn run tailwind --minify"
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.3.2"
+  }
+}
