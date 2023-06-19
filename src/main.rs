@@ -13,7 +13,8 @@ use std::{
 use anyhow::Result;
 use askama::Template;
 use camino::{Utf8Path, Utf8PathBuf};
-use time::OffsetDateTime;
+use rayon::iter::{IntoParallelIterator, IntoParallelRefMutIterator, ParallelIterator};
+use time::{OffsetDateTime, UtcOffset};
 
 use self::{
     cli::Cli, highlight::Highlighter, minify::Minifier, schema::JsonExport, templates::FileInfo,
@@ -35,6 +36,7 @@ static STYLESHEET: &str = include_str!("../assets/style.css");
 
 fn main() -> Result<()> {
     let cli = Cli::parse();
+    let offset = UtcOffset::current_local_offset()?;
 
     if let Some(sub) = cli.cmd {
         match sub {
@@ -78,7 +80,7 @@ fn main() -> Result<()> {
             templates::Index {
                 title: "Index",
                 base_dir: "./",
-                generated: OffsetDateTime::now_local()?,
+                generated: OffsetDateTime::now_utc().to_offset(offset),
                 files: &files,
                 totals: &export.totals,
             }
@@ -87,7 +89,7 @@ fn main() -> Result<()> {
         ),
     )?;
 
-    for file in files {
+    files.into_par_iter().try_for_each(|file| {
         let output = output_dir
             .join(&file.relative_path)
             .with_extension("rs.html");
@@ -111,7 +113,9 @@ fn main() -> Result<()> {
                 .as_bytes(),
             ),
         )?;
-    }
+
+        anyhow::Ok(())
+    })?;
 
     Ok(())
 }
@@ -138,7 +142,7 @@ fn merge_file_info(
     coverage: &[schema::File],
 ) -> Vec<FileInfo> {
     files
-        .into_iter()
+        .into_par_iter()
         .filter_map(|(path, relative_path)| {
             let info = coverage.iter().find(|info| info.filename == path)?;
 
@@ -173,7 +177,7 @@ fn segments_to_ranges(
 }
 
 fn merge_function_info(files: &mut Vec<FileInfo>, functions: &[schema::Function]) {
-    for file in files {
+    files.par_iter_mut().for_each(|file| {
         for function in functions
             .iter()
             .filter(|f| f.filenames.iter().any(|name| name == &file.path))
@@ -192,5 +196,5 @@ fn merge_function_info(files: &mut Vec<FileInfo>, functions: &[schema::Function]
                 }
             }
         }
-    }
+    });
 }
