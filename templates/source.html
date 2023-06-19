@@ -54,17 +54,17 @@
             {% when Coverage::Unknown %}
           {% endmatch %}
         </td>
-        <td>
-          {% let class %}
-          {% match self.get_coverage(loop.index) %}
-            {% when Coverage::Covered(_) %}
-              {% let class = "covered" %}
-            {% when Coverage::Uncovered %}
-              {% let class = "uncovered" %}
-            {% when Coverage::Unknown %}
-              {% let class = "" %}
-          {% endmatch %}
-          <pre class="{{class}}">{{line|safe}}</pre>
+        {% let class %}
+        {% match self.get_coverage(loop.index) %}
+          {% when Coverage::Covered(_) %}
+            {% let class = "covered" %}
+          {% when Coverage::Uncovered %}
+            {% let class = "uncovered" %}
+          {% when Coverage::Unknown %}
+            {% let class = "" %}
+        {% endmatch %}
+        <td class="{{class}}">
+          <pre>{{line|safe}}</pre>
           {% if let Some(functions) = self.info.uncalled.get(loop.index) %}
             <div class="source-message">
               <p>Missing instantiations:</p>
