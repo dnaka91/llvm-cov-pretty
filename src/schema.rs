@@ -221,24 +221,7 @@ mod demangle {
         where
             E: serde::de::Error,
         {
-            let mut v = rustc_demangle::demangle(v).to_string();
-            remove_hex_hashes(&mut v);
-
-            Ok(v)
-        }
-    }
-
-    /// Remove all hex-hashes from a function name. For example `[ab010203]`.
-    ///
-    /// These seem to only appear at the end of a name element. Thus, they are always followed by a
-    /// `::` separator (which is left intact).
-    fn remove_hex_hashes(v: &mut String) {
-        while let Some((start, end)) = v
-            .rfind("]::")
-            .and_then(|end| v[..end].rfind('[').zip(Some(end + 1)))
-            .filter(|&(start, end)| v[start + 1..end - 1].chars().all(|c| c.is_ascii_hexdigit()))
-        {
-            v.replace_range(start..end, "");
+            Ok(format!("{:#}", rustc_demangle::demangle(v)))
         }
     }
 }
