@@ -1,4 +1,4 @@
-use std::{fmt, fmt::Write};
+use std::fmt::{Display, Write};
 
 use anyhow::Result;
 use camino::Utf8Path;
@@ -25,7 +25,7 @@ impl Highlighter {
 
         for line in content.lines() {
             lines.push(if no_highlight {
-                Escape(line).to_string()
+                escape(line).to_string()
             } else {
                 let parsed_line = parse_state.parse_line(line, &self.ps)?;
                 line_tokens_to_span(line, &parsed_line, &mut scope_stack)?
@@ -62,7 +62,7 @@ fn line_tokens_to_span(
 
 fn append_span(buf: &mut String, scopes: &[Scope], line: &str) -> Result<(), std::fmt::Error> {
     if line.chars().all(char::is_whitespace) {
-        return write!(buf, "{}", Escape(line));
+        return write!(buf, "{}", escape(line));
     }
 
     if let Some(scope) = scopes.last() {
@@ -71,7 +71,7 @@ fn append_span(buf: &mut String, scopes: &[Scope], line: &str) -> Result<(), std
         buf.push_str("\">");
     }
 
-    write!(buf, "{}", Escape(line))?;
+    write!(buf, "{}", escape(line))?;
 
     if !scopes.is_empty() {
         buf.push_str("</span>");
@@ -95,37 +95,6 @@ fn scope_to_classes(s: &mut String, scope: Scope) {
     }
 }
 
-/// Wrapper struct which will emit the HTML-escaped version of the contained
-/// string when passed to a format string.
-struct Escape<'a>(pub &'a str);
-
-impl<'a> fmt::Display for Escape<'a> {
-    fn fmt(&self, fmt: &mut fmt::Formatter<'_>) -> fmt::Result {
-        let Escape(s) = *self;
-        let pile_o_bits = s;
-        let mut last = 0;
-        for (i, ch) in s.bytes().enumerate() {
-            match ch as char {
-                '<' | '>' | '&' | '\'' | '"' => {
-                    fmt.write_str(&pile_o_bits[last..i])?;
-                    let s = match ch as char {
-                        '>' => "&gt;",
-                        '<' => "&lt;",
-                        '&' => "&amp;",
-                        '\'' => "&#39;",
-                        '"' => "&quot;",
-                        _ => unreachable!(),
-                    };
-                    fmt.write_str(s)?;
-                    last = i + 1;
-                }
-                _ => {}
-            }
-        }
-
-        if last < s.len() {
-            fmt.write_str(&pile_o_bits[last..])?;
-        }
-        Ok(())
-    }
+fn escape(value: &str) -> impl Display + '_ {
+    askama_escape::escape(value, askama_escape::Html)
 }

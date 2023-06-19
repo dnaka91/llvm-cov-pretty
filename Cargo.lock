@@ -457,6 +457,7 @@ version = "0.1.0"
 dependencies = [
  "anyhow",
  "askama",
+ "askama_escape",
  "camino",
  "clap",
  "clap_complete",
