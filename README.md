@@ -10,6 +10,8 @@ More beautiful HTML reports for `llvm-cov` ([cargo-llvm-cov](https://github.com/
 
 ## Installation
 
+Make sure you have [cargo-llvm-cov](https://github.com/taiki-e/cargo-llvm-cov#installation) installed.
+
 ### From source
 
 To build the project from source, you need a recent installation of Rust. The recommended installation method is through [rustup](https://rustup.rs/). Then open up a terminal and install the project as follows:
@@ -39,6 +41,8 @@ The tool operates on the JSON outpu from llvm-cov. As cargo-llvm-cov directly pr
 ```sh
 cargo llvm-cov --json | llvm-cov-pretty
 ```
+
+**Note** If you haven't used `cargo llvm-cov` before, run it once to make sure it's setup correct.
 
 Of course you can do this in two steps as well:
 
