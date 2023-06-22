@@ -10,7 +10,7 @@ use std::{
     ops::RangeInclusive,
 };
 
-use anyhow::Result;
+use anyhow::{Context, Result};
 use askama::Template;
 use camino::{Utf8Path, Utf8PathBuf};
 use rayon::iter::{IntoParallelIterator, IntoParallelRefMutIterator, ParallelIterator};
@@ -46,6 +46,8 @@ fn main() -> Result<()> {
 
         return Ok(());
     }
+
+    cargo::check_version().context("failed checking cargo-llvm-cov version")?;
 
     let JsonExport { data: [export], .. } = if let Some(input) = cli.input {
         let file = BufReader::new(File::open(input)?);

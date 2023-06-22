@@ -1,6 +1,6 @@
 use std::process::Command;
 
-use anyhow::{bail, Result};
+use anyhow::{bail, ensure, Context, Result};
 use camino::{Utf8Path, Utf8PathBuf};
 use serde::Deserialize;
 
@@ -66,4 +66,49 @@ fn find_target_dir(root: &Utf8Path) -> Result<Utf8PathBuf> {
     serde_json::from_slice::<Metadata>(&output.stdout)
         .map(|data| data.target_directory)
         .map_err(Into::into)
+}
+
+/// Ensure the globally installed `cargo-llvm-cov` is a recent _known-to-be-working_ version, to
+/// avoid possible errors due to different output in older versions.
+pub fn check_version() -> Result<()> {
+    use semver::{Comparator, Op, Prerelease, Version};
+
+    static MIN_VERSION: Comparator = Comparator {
+        op: Op::GreaterEq,
+        major: 0,
+        minor: Some(5),
+        patch: None,
+        pre: Prerelease::EMPTY,
+    };
+
+    let output = Command::new("cargo-llvm-cov")
+        .args(["llvm-cov", "--version"])
+        .output()?;
+
+    if !output.status.success() {
+        bail!(
+            "failed running cargo-llvm-cov (llvm-cov --version):\n{}",
+            String::from_utf8_lossy(&output.stderr)
+        );
+    }
+
+    let output = String::from_utf8_lossy(&output.stdout);
+    let (name, version) = output
+        .trim()
+        .split_once(' ')
+        .context("no separator between name and version")?;
+
+    ensure!(
+        name == "cargo-llvm-cov",
+        "program doesn't appear to be cargo-llvm-cov"
+    );
+
+    let version = version.parse::<Version>()?;
+
+    ensure!(
+        MIN_VERSION.matches(&version),
+        "cargo-llvm-cov version {version} is too old, need at least {MIN_VERSION}"
+    );
+
+    Ok(())
 }

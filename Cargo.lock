@@ -534,6 +534,7 @@ dependencies = [
  "quote",
  "rayon",
  "rustc-demangle",
+ "semver",
  "serde",
  "serde_json",
  "syntect",
