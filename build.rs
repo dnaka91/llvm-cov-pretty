@@ -116,19 +116,25 @@ fn main() {
 
     let names = BUILTIN
         .iter()
-        .map(|v| v.0)
-        .chain(CUSTOM.iter().map(|v| v.0));
+        .map(|v| (v.0, Some(v.1), Some(v.2)))
+        .chain(CUSTOM.iter().copied());
 
-    let variants = names.clone().map(|name| {
+    let variants = names.clone().map(|(name, light, dark)| {
         let variant = format_ident!("{}", name.to_pascal_case());
-        quote! { #variant }
+        let doc = match (light.is_some(), dark.is_some()) {
+            (true, true) => "🔳 Both light and dark theme",
+            (true, false) => "⬜ Light theme only",
+            (false, true) => "⬛ Dark theme only",
+            (false, false) => unreachable!("already checked this case before"),
+        };
+        quote! { #[doc = #doc] #variant }
     });
-    let contents = names.clone().map(|name| {
+    let contents = names.clone().map(|(name, _, _)| {
         let variant = format_ident!("{}", name.to_pascal_case());
         let path = format!("{out}/{name}.css");
         quote! { Self::#variant => include_str!(#path) }
     });
-    let displays = names.map(|name| {
+    let displays = names.map(|(name, _, _)| {
         let variant = format_ident!("{}", name.to_pascal_case());
         let display = name.to_kebab_case();
         quote! { Self::#variant => #display }
