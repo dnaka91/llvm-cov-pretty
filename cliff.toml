@@ -22,7 +22,11 @@ body = """
 {% for group, commits in commits | group_by(attribute="group") %}
     ### {{ group | upper_first }}
     {% for commit in commits %}
-        - {% if commit.breaking %}[**breaking**] {% endif %}{{ commit.message | upper_first }}\
+        {% set commit_id = commit.id | truncate(length=7, end="") %}\
+        {% set commit_url = "https://github.com/dnaka91/llvm-cov-pretty/commit/" ~ commit_id %}\
+        - {% if commit.breaking %}[**breaking**] {% endif %}\
+          {{ commit.message | upper_first }} \
+          ([{{ commit_id }}]({{ commit_url }}))\
     {% endfor %}
 {% endfor %}\n
 """
