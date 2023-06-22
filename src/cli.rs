@@ -17,7 +17,7 @@ use crate::styles::Theme;
 #[command(about, author, version)]
 pub struct Cli {
     /// Disable any code highlighting.
-    #[arg(long)]
+    #[arg(long, conflicts_with = "theme")]
     pub no_highlight: bool,
     /// Show annotations for missing instantiations.
     #[arg(long)]
@@ -26,12 +26,13 @@ pub struct Cli {
     #[arg(long, default_value_t = Theme::OneHalf)]
     pub theme: Theme,
     /// Where to place the coverage color marker.
-    #[arg(long, default_value_t = CoverageStyle::Line)]
+    #[arg(long, default_value_t = CoverageStyle::Line, value_name = "STYLE")]
     pub coverage_style: CoverageStyle,
     /// Location of the project's Cargo.toml, in case the default detection isn't sufficient.
-    #[arg(long)]
+    #[arg(long, value_hint = ValueHint::FilePath, value_name = "PATH")]
     pub manifest_path: Option<Utf8PathBuf>,
     /// Input coverage file encoded as JSON, or STDIN if omitted.
+    #[arg(value_hint = ValueHint::FilePath)]
     pub input: Option<Utf8PathBuf>,
     #[command(subcommand)]
     pub cmd: Option<Command>,
