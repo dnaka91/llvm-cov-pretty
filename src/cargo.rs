@@ -4,19 +4,26 @@ use anyhow::{bail, ensure, Context, Result};
 use camino::{Utf8Path, Utf8PathBuf};
 use serde::Deserialize;
 
-/// Locate the output directory, where the report files are written to.
-///
-/// This will only work if the current working directory contains a Rust project, as the report is
-/// saved under `<target_dir>/cargo-llvm-cov`.
-pub fn output_dir() -> Result<Utf8PathBuf> {
-    let root = find_root()?;
-    let target_dir = find_target_dir(&root)?;
-
-    Ok(target_dir.join(env!("CARGO_PKG_NAME")))
+/// Locate the root directory of the project under the current working directory.
+pub fn project_dir() -> Result<Utf8PathBuf> {
+    let manifest_path = cargo_locate_project()?;
+    cargo_metadata(&manifest_path).map(|meta| meta.workspace_root)
 }
 
-/// Use `cargo` to find the root folder of the project under the current working directory.
-fn find_root() -> Result<Utf8PathBuf> {
+/// Locate the output directory, where the report files are written to.
+///
+/// Similar to how `cargo-llvm-cov` creates custom output folders in the `target` folder, we create
+/// our own `target/llvm-cov-pretty` folder that holds the report files.
+///
+/// This will only work if the current working directory contains a Rust project.
+pub fn output_dir() -> Result<Utf8PathBuf> {
+    let manifest_path = cargo_locate_project()?;
+    cargo_metadata(&manifest_path).map(|meta| meta.target_directory.join(env!("CARGO_PKG_NAME")))
+}
+
+/// Use `cargo` to find the root `Cargo.toml` file of the project under the current working
+/// directory.
+fn cargo_locate_project() -> Result<Utf8PathBuf> {
     #[derive(Deserialize)]
     struct LocateProject {
         root: Utf8PathBuf,
@@ -24,7 +31,7 @@ fn find_root() -> Result<Utf8PathBuf> {
 
     let output = Command::new("cargo")
         .arg("locate-project")
-        .args(["--message-format", "json"])
+        .args(["--message-format", "json", "--workspace"])
         .output()?;
 
     if !output.status.success() {
@@ -39,21 +46,21 @@ fn find_root() -> Result<Utf8PathBuf> {
         .map_err(Into::into)
 }
 
-/// Use `cargo` to find the `target` output directory of the given project.
-///
-/// Similar to how `cargo-llvm-cov` creates custom output folders in the `target` folder, we create
-/// our own `target/llvm-cov-pretty` folder that holds the report files. Therefore, we need to find
-/// the base `target` folder.
-fn find_target_dir(root: &Utf8Path) -> Result<Utf8PathBuf> {
-    #[derive(Deserialize)]
-    struct Metadata {
-        target_directory: Utf8PathBuf,
-    }
+/// Partial structure for the `cargo metadata` JSON output.
+#[derive(Deserialize)]
+struct Metadata {
+    /// The target directory where build artifacts are stored.
+    target_directory: Utf8PathBuf,
+    /// The root of the workspace (even if the project isn't a workspace).
+    workspace_root: Utf8PathBuf,
+}
 
+/// Use `cargo` to get the metadata information of the given project.
+fn cargo_metadata(manifest_path: &Utf8Path) -> Result<Metadata> {
     let output = Command::new("cargo")
         .arg("metadata")
         .args(["--format-version", "1"])
-        .args(["--manifest-path", root.as_str()])
+        .args(["--manifest-path", manifest_path.as_str()])
         .output()?;
 
     if !output.status.success() {
@@ -63,9 +70,7 @@ fn find_target_dir(root: &Utf8Path) -> Result<Utf8PathBuf> {
         );
     }
 
-    serde_json::from_slice::<Metadata>(&output.stdout)
-        .map(|data| data.target_directory)
-        .map_err(Into::into)
+    serde_json::from_slice::<Metadata>(&output.stdout).map_err(Into::into)
 }
 
 /// Ensure the globally installed `cargo-llvm-cov` is a recent _known-to-be-working_ version, to
@@ -111,4 +116,33 @@ pub fn check_version() -> Result<()> {
     );
 
     Ok(())
+}
+
+#[cfg(test)]
+mod tests {
+    #[test]
+    fn project_dir() {
+        super::project_dir().unwrap();
+    }
+
+    #[test]
+    fn output_dir() {
+        super::output_dir().unwrap();
+    }
+
+    #[test]
+    fn cargo_locate_project() {
+        super::cargo_locate_project().unwrap();
+    }
+
+    #[test]
+    fn cargo_metadata() {
+        let root = super::cargo_locate_project().unwrap();
+        super::cargo_metadata(&root).unwrap();
+    }
+
+    #[test]
+    fn check_version() {
+        super::check_version().unwrap();
+    }
 }

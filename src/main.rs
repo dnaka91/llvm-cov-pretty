@@ -4,7 +4,6 @@
 
 use std::{
     collections::HashMap,
-    env,
     fs::{self, File},
     io::BufReader,
     ops::RangeInclusive,
@@ -57,10 +56,10 @@ fn main() -> Result<()> {
         serde_json::from_reader::<_, JsonExport>(stdin)?
     };
 
+    let project_dir = cargo::project_dir()?;
     let output_dir = cargo::output_dir()?;
 
-    let pwd = Utf8PathBuf::try_from(env::current_dir()?)?;
-    let files = collect_project_files(&pwd)?;
+    let files = collect_project_files(&project_dir)?;
     let mut files = merge_file_info(files, &export.files);
 
     if !cli.no_instantiations {
