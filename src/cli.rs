@@ -1,12 +1,13 @@
 //! Handling of command line arguments.
 
 use std::{
+    fmt::{self, Display},
     fs::OpenOptions,
     io::{self, BufWriter, Write},
 };
 
 use camino::{Utf8Path, Utf8PathBuf};
-use clap::{CommandFactory, Parser, Subcommand, ValueHint};
+use clap::{CommandFactory, Parser, Subcommand, ValueEnum, ValueHint};
 use clap_complete::Shell;
 use color_eyre::eyre::{ensure, Result, WrapErr};
 
@@ -24,6 +25,9 @@ pub struct Cli {
     /// The highlighting theme to use, if not disabled.
     #[arg(long, default_value_t = Theme::OneHalf)]
     pub theme: Theme,
+    /// Where to place the coverage color marker.
+    #[arg(long, default_value_t = CoverageStyle::Line)]
+    pub coverage_style: CoverageStyle,
     /// Location of the project's Cargo.toml, in case the default detection isn't sufficient.
     #[arg(long)]
     pub manifest_path: Option<Utf8PathBuf>,
@@ -37,6 +41,24 @@ impl Cli {
     /// Parse the command line arguments passed to the program.
     pub fn parse() -> Self {
         <Self as Parser>::parse()
+    }
+}
+
+/// The way in which to mark source code lines as covered or uncovered.
+#[derive(Clone, Copy, Eq, PartialEq, ValueEnum)]
+pub enum CoverageStyle {
+    /// Highlight the whole source line.
+    Line,
+    /// Only highlight the gutter (count column).
+    Gutter,
+}
+
+impl Display for CoverageStyle {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(match self {
+            Self::Line => "line",
+            Self::Gutter => "gutter",
+        })
     }
 }
 

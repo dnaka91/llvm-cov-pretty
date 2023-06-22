@@ -6,7 +6,7 @@ use askama::Template;
 use camino::Utf8PathBuf;
 use time::OffsetDateTime;
 
-use crate::schema;
+use crate::{cli::CoverageStyle, schema};
 
 /// Global constant instance with this project's info, so it doesn't have to be included as part of
 /// each template struct.
@@ -62,6 +62,7 @@ pub struct Source<'a> {
     pub base_dir: &'a str,
     pub lines: &'a [String],
     pub info: &'a FileInfo,
+    pub coverage_style: CoverageStyle,
     pub show_instantiations: bool,
 }
 
@@ -148,8 +149,7 @@ mod tests {
     use camino::Utf8PathBuf;
     use time::OffsetDateTime;
 
-    use super::FileInfo;
-    use crate::schema;
+    use super::{schema, CoverageStyle, FileInfo};
 
     #[test]
     fn render_index() {
@@ -187,6 +187,7 @@ mod tests {
                 called: HashMap::default(),
                 uncalled: HashMap::default(),
             },
+            coverage_style: CoverageStyle::Line,
             show_instantiations: true,
         }
         .render()

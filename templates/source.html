@@ -45,17 +45,9 @@
         <td>
           <a name="L{{loop.index}}" href="#L{{loop.index}}">{{loop.index}}</a>
         </td>
-        <td>
-          {% match self.get_coverage(loop.index) %}
-            {% when Coverage::Covered(count) %}
-              {{count}}
-            {% when Coverage::Uncovered(count) %}
-              {{count}}
-            {% when Coverage::Unknown %}
-          {% endmatch %}
-        </td>
+        {% let coverage = self.get_coverage(loop.index) %}
         {% let class %}
-        {% match self.get_coverage(loop.index) %}
+        {% match coverage %}
           {% when Coverage::Covered(_) %}
             {% let class = "covered" %}
           {% when Coverage::Uncovered(_) %}
@@ -63,7 +55,16 @@
           {% when Coverage::Unknown %}
             {% let class = "" %}
         {% endmatch %}
-        <td class="{{class}}">
+        <td{% if coverage_style == CoverageStyle::Gutter %} class="gutter {{class}}"{% endif %}>
+          {% match coverage %}
+            {% when Coverage::Covered(count) %}
+              {{count}}
+            {% when Coverage::Uncovered(count) %}
+              {{count}}
+            {% when Coverage::Unknown %}
+          {% endmatch %}
+        </td>
+        <td{% if coverage_style == CoverageStyle::Line %} class="{{class}}"{% endif %}>
           <pre>{{line|safe}}</pre>
           {% if show_instantiations %}
             {% if let Some(functions) = self.info.uncalled.get(loop.index) %}

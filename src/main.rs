@@ -115,6 +115,7 @@ fn main() -> Result<()> {
                     base_dir: &"../".repeat(file.relative_path.ancestors().skip(2).count()),
                     lines: &lines,
                     info: &file,
+                    coverage_style: cli.coverage_style,
                     show_instantiations: cli.show_instantiations,
                 }
                 .render()?
