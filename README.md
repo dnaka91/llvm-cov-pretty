@@ -8,6 +8,12 @@ More beautiful HTML reports for `llvm-cov` ([cargo-llvm-cov](https://github.com/
 - More colors, because why not.
 - Progress bars (like in grcov).
 
+## A note on stability
+
+This tool is still in its early stages, and the JSON output of `llvm-cov` has several quirks and complexities. Therefore, for the time being, always generate the regular HTML report as well and compare the output.
+
+Please file an issue if you find any differences.
+
 ## Installation
 
 Make sure you have [cargo-llvm-cov](https://github.com/taiki-e/cargo-llvm-cov#installation) installed.
@@ -34,15 +40,21 @@ paru -S llvm-cov-pretty
 
 If you don't want to build the project yourself, you can download pre-build binaries instead. Have a look at the [release page](https://github.com/dnaka91/llvm-cov-pretty/releases) and find the appropriate file for your platform.
 
+## Requirements
+
+Before you can use this tool, make sure the following steps are done:
+
+- In addition to [installing `cargo-llvm-cov`](#installation), make sure you've run it at least once on your machine in any Rust project. It will jump into interactive mode and install any missing tools that it needs itself.
+- It is expected that you are in the context of a Rust project. Ensure you invoke the program while located in a Rust project in your terminal.
+  - However, you can pass the `--manifest-path` argument, but make sure you pass the same path to both `cargo-llvm-cov` and `llvm-cov-pretty`.
+
 ## Usage
 
-The tool operates on the JSON outpu from llvm-cov. As cargo-llvm-cov directly prints those to the standard output, you can pipe the programs together like so:
+The tool operates on the JSON output from llvm-cov. As cargo-llvm-cov directly prints those to the standard output, you can pipe the programs together like so:
 
 ```sh
 cargo llvm-cov --json | llvm-cov-pretty
 ```
-
-**Note** If you haven't used `cargo llvm-cov` before, run it once to make sure it's setup correct.
 
 Of course you can do this in two steps as well:
 
