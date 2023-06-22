@@ -49,8 +49,8 @@
           {% match self.get_coverage(loop.index) %}
             {% when Coverage::Covered(count) %}
               {{count}}
-            {% when Coverage::Uncovered %}
-              0
+            {% when Coverage::Uncovered(count) %}
+              {{count}}
             {% when Coverage::Unknown %}
           {% endmatch %}
         </td>
@@ -58,20 +58,22 @@
         {% match self.get_coverage(loop.index) %}
           {% when Coverage::Covered(_) %}
             {% let class = "covered" %}
-          {% when Coverage::Uncovered %}
+          {% when Coverage::Uncovered(_) %}
             {% let class = "uncovered" %}
           {% when Coverage::Unknown %}
             {% let class = "" %}
         {% endmatch %}
         <td class="{{class}}">
           <pre>{{line|safe}}</pre>
-          {% if let Some(functions) = self.info.uncalled.get(loop.index) %}
-            <div class="source-message">
-              <p>Missing instantiations:</p>
-              {% for function in functions %}
-                <pre>{{function}}</pre>
-              {% endfor %}
-            </div>
+          {% if show_instantiations %}
+            {% if let Some(functions) = self.info.uncalled.get(loop.index) %}
+              <div class="source-message">
+                <p>Missing instantiations:</p>
+                {% for function in functions %}
+                  <pre>{{function}}</pre>
+                {% endfor %}
+              </div>
+            {% endif %}
           {% endif %}
         </td>
       </tr>

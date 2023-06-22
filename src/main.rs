@@ -68,11 +68,9 @@ fn main() -> Result<()> {
     let files = collect_project_files(&project_dir)?;
     let mut files = merge_file_info(files, &export.files);
 
-    if cli.show_instantiations {
-        merge_function_info(&mut files, &export.functions);
-    }
+    merge_function_info(&mut files, &export.functions);
 
-    files.sort_unstable_by(|a,b|a.relative_path.cmp(&b.relative_path));
+    files.sort_unstable_by(|a, b| a.relative_path.cmp(&b.relative_path));
 
     fs::remove_dir_all(&output_dir).ok();
     fs::create_dir_all(&output_dir)?;
@@ -117,6 +115,7 @@ fn main() -> Result<()> {
                     base_dir: &"../".repeat(file.relative_path.ancestors().skip(2).count()),
                     lines: &lines,
                     info: &file,
+                    show_instantiations: cli.show_instantiations,
                 }
                 .render()?
                 .as_bytes(),

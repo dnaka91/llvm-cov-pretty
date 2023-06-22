@@ -62,6 +62,7 @@ pub struct Source<'a> {
     pub base_dir: &'a str,
     pub lines: &'a [String],
     pub info: &'a FileInfo,
+    pub show_instantiations: bool,
 }
 
 impl<'a> Source<'a> {
@@ -70,24 +71,49 @@ impl<'a> Source<'a> {
             .covered
             .get(index)
             .copied()
-            .map(Coverage::Covered)
-            .or_else(|| self.info.uncovered.get(index).map(|_| Coverage::Uncovered))
+            .map(|count| {
+                // Even though the line is covered, we might have a part of it that is not covered.
+                // We keep the original coverage count but still mark it as uncovered.
+                if self.info.uncalled.contains_key(index) {
+                    Coverage::Uncovered(count)
+                } else {
+                    Coverage::Covered(count)
+                }
+            })
+            .or_else(|| {
+                self.info
+                    .uncovered
+                    .get(index)
+                    .map(|_| Coverage::Uncovered(0))
+            })
             .unwrap_or(Coverage::Unknown)
     }
 }
 
+/// The coverage inforamation for a single line of code.
 #[derive(Clone, Copy)]
 pub enum Coverage {
+    /// Line is covered and was called the amount of times.
     Covered(u64),
-    Uncovered,
+    /// Line is uncovered but can still have a count, if only parts of the line are uncovered.
+    Uncovered(u64),
+    /// The coverage information is not available.
     Unknown,
 }
 
+/// Quality level of coverage.
+///
+/// This is somewhat of a categorization of different coverage percentages, and is mostly there for
+/// coloring purposes.
 #[derive(Clone, Copy)]
 pub enum CoverageLevel {
+    /// 90% coverage and upwards.
     VeryHigh,
+    /// 75% or more.
     High,
+    /// 50% at least.
     Medium,
+    /// Anything else.
     Low,
 }
 
@@ -161,6 +187,7 @@ mod tests {
                 called: HashMap::default(),
                 uncalled: HashMap::default(),
             },
+            show_instantiations: true,
         }
         .render()
         .unwrap();
