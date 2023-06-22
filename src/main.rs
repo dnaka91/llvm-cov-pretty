@@ -72,6 +72,8 @@ fn main() -> Result<()> {
         merge_function_info(&mut files, &export.functions);
     }
 
+    files.sort_unstable_by(|a,b|a.relative_path.cmp(&b.relative_path));
+
     fs::remove_dir_all(&output_dir).ok();
     fs::create_dir_all(&output_dir)?;
 
