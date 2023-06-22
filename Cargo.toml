@@ -1,6 +1,6 @@
 [package]
 name = "llvm-cov-pretty"
-version = "0.1.1"
+version = "0.1.2"
 authors = ["Dominik Nakamura <dnaka91@gmail.com>"]
 edition = "2021"
 description = "More beautiful HTML reports for llvm-cov/cargo-llvm-cov"
@@ -47,6 +47,9 @@ version = "5.0.0"
 default-features = false
 features = ["default-syntaxes", "parsing", "regex-fancy"]
 
+[dev-dependencies]
+indoc = "2.0.1"
+
 [build-dependencies]
 css-minify = "0.3.1"
 heck = "0.4.1"
@@ -60,6 +63,3 @@ features = ["default-themes", "html", "plist-load", "regex-fancy"]
 [profile.release]
 lto = true
 strip = true
-
-[dev-dependencies]
-indoc = "2.0.1"

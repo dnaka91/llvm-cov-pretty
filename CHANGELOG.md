@@ -2,6 +2,30 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.1.2] - 2023-06-22
+
+### Bug Fixes
+
+- Ensure partially covered lines are always marked as uncovered ([f4b3f0f](https://github.com/dnaka91/llvm-cov-pretty/commit/f4b3f0f))
+
+### Documentation
+
+- Note about first setup and stability ([9bcc4f3](https://github.com/dnaka91/llvm-cov-pretty/commit/9bcc4f3))
+- Show light/dark theme support in help messages ([5fa713f](https://github.com/dnaka91/llvm-cov-pretty/commit/5fa713f))
+
+### Features
+
+- Improve error messages, especially external tool checks ([3788323](https://github.com/dnaka91/llvm-cov-pretty/commit/3788323))
+- Allow manually defining the project's manifest path ([5d972b8](https://github.com/dnaka91/llvm-cov-pretty/commit/5d972b8))
+- Make annotations for missing instantations opt-in ([d798f5a](https://github.com/dnaka91/llvm-cov-pretty/commit/d798f5a))
+- Ensure files lists are always sorted alphabetically ([2b898f8](https://github.com/dnaka91/llvm-cov-pretty/commit/2b898f8))
+- Add option to only highlight the gutter for coverage info ([97b359c](https://github.com/dnaka91/llvm-cov-pretty/commit/97b359c))
+
+### Refactor
+
+- Adjust schema structure to only accept a single file name ([1443ab1](https://github.com/dnaka91/llvm-cov-pretty/commit/1443ab1))
+- Improve CLI argument configuration ([e7ca3cb](https://github.com/dnaka91/llvm-cov-pretty/commit/e7ca3cb))
+
 ## [0.1.1] - 2023-06-22
 
 ### Bug Fixes
