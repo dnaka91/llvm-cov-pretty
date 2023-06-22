@@ -1,13 +1,18 @@
 use std::process::Command;
 
-use anyhow::{bail, ensure, Context, Result};
 use camino::{Utf8Path, Utf8PathBuf};
+use color_eyre::{
+    eyre::{ensure, eyre, Context, Result},
+    Help, SectionExt,
+};
 use serde::Deserialize;
 
 /// Locate the root directory of the project under the current working directory.
 pub fn project_dir() -> Result<Utf8PathBuf> {
-    let manifest_path = cargo_locate_project()?;
-    cargo_metadata(&manifest_path).map(|meta| meta.workspace_root)
+    let manifest_path = cargo_locate_project().wrap_err("failed to locate project")?;
+    cargo_metadata(&manifest_path)
+        .map(|meta| meta.workspace_root)
+        .wrap_err("failed to load project metadata")
 }
 
 /// Locate the output directory, where the report files are written to.
@@ -17,8 +22,10 @@ pub fn project_dir() -> Result<Utf8PathBuf> {
 ///
 /// This will only work if the current working directory contains a Rust project.
 pub fn output_dir() -> Result<Utf8PathBuf> {
-    let manifest_path = cargo_locate_project()?;
-    cargo_metadata(&manifest_path).map(|meta| meta.target_directory.join(env!("CARGO_PKG_NAME")))
+    let manifest_path = cargo_locate_project().wrap_err("failed to locate project")?;
+    cargo_metadata(&manifest_path)
+        .map(|meta| meta.target_directory.join(env!("CARGO_PKG_NAME")))
+        .wrap_err("failed to load project metadata")
 }
 
 /// Use `cargo` to find the root `Cargo.toml` file of the project under the current working
@@ -35,15 +42,15 @@ fn cargo_locate_project() -> Result<Utf8PathBuf> {
         .output()?;
 
     if !output.status.success() {
-        bail!(
-            "failed running cargo (locate-project):\n{}",
-            String::from_utf8_lossy(&output.stderr)
-        );
+        let stderr = String::from_utf8_lossy(&output.stderr);
+        return Err(eyre!("failed running cargo (locate-project)")
+            .with_section(move || stderr.to_string().header("Stderr:"))
+            .suggestion("ensure you are inside a Rust project"));
     }
 
     serde_json::from_slice::<LocateProject>(&output.stdout)
         .map(|data| data.root)
-        .map_err(Into::into)
+        .wrap_err("failed to parse the `cargo locate-project` JSON output")
 }
 
 /// Partial structure for the `cargo metadata` JSON output.
@@ -64,13 +71,13 @@ fn cargo_metadata(manifest_path: &Utf8Path) -> Result<Metadata> {
         .output()?;
 
     if !output.status.success() {
-        bail!(
-            "failed running cargo (metadata):\n{}",
-            String::from_utf8_lossy(&output.stderr)
-        );
+        let stderr = String::from_utf8_lossy(&output.stderr);
+        return Err(eyre!("failed running cargo (metadata)")
+            .with_section(move || stderr.to_string().header("Stderr:")));
     }
 
-    serde_json::from_slice::<Metadata>(&output.stdout).map_err(Into::into)
+    serde_json::from_slice::<Metadata>(&output.stdout)
+        .wrap_err("failed to parse the `cargo metadata` JSON output")
 }
 
 /// Ensure the globally installed `cargo-llvm-cov` is a recent _known-to-be-working_ version, to
@@ -91,17 +98,19 @@ pub fn check_version() -> Result<()> {
         .output()?;
 
     if !output.status.success() {
-        bail!(
-            "failed running cargo-llvm-cov (llvm-cov --version):\n{}",
-            String::from_utf8_lossy(&output.stderr)
-        );
+        let stdout = String::from_utf8_lossy(&output.stdout);
+        let stderr = String::from_utf8_lossy(&output.stderr);
+        return Err(eyre!("failed running cargo-llvm-cov (llvm-cov --version)")
+            .with_section(move || stdout.to_string().header("Stdout:"))
+            .with_section(move || stderr.to_string().header("Stderr:"))
+            .suggestion("ensure it is installed and available on your $PATH"));
     }
 
     let output = String::from_utf8_lossy(&output.stdout);
     let (name, version) = output
         .trim()
         .split_once(' ')
-        .context("no separator between name and version")?;
+        .ok_or_else(|| eyre!("no separator between name and version"))?;
 
     ensure!(
         name == "cargo-llvm-cov",

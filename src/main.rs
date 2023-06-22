@@ -9,9 +9,9 @@ use std::{
     ops::RangeInclusive,
 };
 
-use anyhow::{Context, Result};
 use askama::Template;
 use camino::{Utf8Path, Utf8PathBuf};
+use color_eyre::eyre::{Error, Result, WrapErr};
 use rayon::iter::{IntoParallelIterator, IntoParallelRefMutIterator, ParallelIterator};
 use time::{OffsetDateTime, UtcOffset};
 
@@ -37,6 +37,8 @@ fn main() -> Result<()> {
     let cli = Cli::parse();
     let offset = UtcOffset::current_local_offset()?;
 
+    color_eyre::install()?;
+
     if let Some(sub) = cli.cmd {
         match sub {
             cli::Command::Completions { shell } => cli::completions(shell),
@@ -46,18 +48,20 @@ fn main() -> Result<()> {
         return Ok(());
     }
 
-    cargo::check_version().context("failed checking cargo-llvm-cov version")?;
+    cargo::check_version().wrap_err("failed checking cargo-llvm-cov version")?;
 
     let JsonExport { data: [export], .. } = if let Some(input) = cli.input {
-        let file = BufReader::new(File::open(input)?);
-        serde_json::from_reader::<_, JsonExport>(file)?
+        let file = BufReader::new(File::open(&input)?);
+        serde_json::from_reader::<_, JsonExport>(file)
+            .wrap_err_with(|| format!("failed parsing report data from {input:?}"))?
     } else {
         let stdin = std::io::stdin().lock();
-        serde_json::from_reader::<_, JsonExport>(stdin)?
+        serde_json::from_reader::<_, JsonExport>(stdin)
+            .wrap_err("failed parsing report data from STDIN")?
     };
 
-    let project_dir = cargo::project_dir()?;
-    let output_dir = cargo::output_dir()?;
+    let project_dir = cargo::project_dir().wrap_err("failed to locate project directory")?;
+    let output_dir = cargo::output_dir().wrap_err("failed to locate output directory")?;
 
     let files = collect_project_files(&project_dir)?;
     let mut files = merge_file_info(files, &export.files);
@@ -115,7 +119,7 @@ fn main() -> Result<()> {
             ),
         )?;
 
-        anyhow::Ok(())
+        Ok::<_, Error>(())
     })?;
 
     Ok(())

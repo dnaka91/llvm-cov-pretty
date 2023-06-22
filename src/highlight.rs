@@ -6,8 +6,8 @@
 
 use std::fmt::{Display, Write};
 
-use anyhow::Result;
 use camino::Utf8Path;
+use color_eyre::eyre::{eyre, Result, WrapErr};
 use syntect::parsing::{ParseState, Scope, ScopeStack, ScopeStackOp, SyntaxSet, SCOPE_REPO};
 
 /// The highlighter is the main component that performs transformation of plain source code into
@@ -30,8 +30,12 @@ impl Highlighter {
 
     /// Read the file at the given path and turn each line into annotated HTML content.
     pub fn file_to_spans(&self, file: &Utf8Path, no_highlight: bool) -> Result<Vec<String>> {
-        let content = std::fs::read_to_string(file)?;
-        let syntax = self.ps.find_syntax_by_extension("rs").unwrap();
+        let content = std::fs::read_to_string(file)
+            .wrap_err_with(|| format!("failed reading file contents from {file:?}"))?;
+        let syntax = self
+            .ps
+            .find_syntax_by_extension("rs")
+            .ok_or_else(|| eyre!("missing highlighting syntax for Rust"))?;
 
         let mut parse_state = ParseState::new(syntax);
         let mut scope_stack = ScopeStack::new();

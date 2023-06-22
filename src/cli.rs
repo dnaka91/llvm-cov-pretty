@@ -5,10 +5,10 @@ use std::{
     io::{self, BufWriter, Write},
 };
 
-use anyhow::{ensure, Context, Result};
 use camino::{Utf8Path, Utf8PathBuf};
 use clap::{CommandFactory, Parser, Subcommand, ValueHint};
 use clap_complete::Shell;
+use color_eyre::eyre::{ensure, Result, WrapErr};
 
 use crate::styles::Theme;
 
@@ -77,7 +77,7 @@ pub fn manpages(dir: &Utf8Path) -> Result<()> {
                 .write(true)
                 .create_new(true)
                 .open(&out)
-                .with_context(|| format!("the file `{out}` already exists"))?,
+                .wrap_err_with(|| format!("the file `{out}` already exists"))?,
         );
 
         clap_mangen::Man::new(app.clone()).render(&mut out)?;
