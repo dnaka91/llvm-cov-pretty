@@ -8,8 +8,12 @@ use color_eyre::{
 use serde::Deserialize;
 
 /// Locate the root directory of the project under the current working directory.
-pub fn project_dir() -> Result<Utf8PathBuf> {
-    let manifest_path = cargo_locate_project().wrap_err("failed to locate project")?;
+pub fn project_dir(manifest_path: Option<&Utf8Path>) -> Result<Utf8PathBuf> {
+    let manifest_path = match manifest_path {
+        Some(path) => path.to_owned(),
+        None => cargo_locate_project().wrap_err("failed to locate project")?,
+    };
+
     cargo_metadata(&manifest_path)
         .map(|meta| meta.workspace_root)
         .wrap_err("failed to load project metadata")
@@ -21,8 +25,12 @@ pub fn project_dir() -> Result<Utf8PathBuf> {
 /// our own `target/llvm-cov-pretty` folder that holds the report files.
 ///
 /// This will only work if the current working directory contains a Rust project.
-pub fn output_dir() -> Result<Utf8PathBuf> {
-    let manifest_path = cargo_locate_project().wrap_err("failed to locate project")?;
+pub fn output_dir(manifest_path: Option<&Utf8Path>) -> Result<Utf8PathBuf> {
+    let manifest_path = match manifest_path {
+        Some(path) => path.to_owned(),
+        None => cargo_locate_project().wrap_err("failed to locate project")?,
+    };
+
     cargo_metadata(&manifest_path)
         .map(|meta| meta.target_directory.join(env!("CARGO_PKG_NAME")))
         .wrap_err("failed to load project metadata")
@@ -131,12 +139,12 @@ pub fn check_version() -> Result<()> {
 mod tests {
     #[test]
     fn project_dir() {
-        super::project_dir().unwrap();
+        super::project_dir(None).unwrap();
     }
 
     #[test]
     fn output_dir() {
-        super::output_dir().unwrap();
+        super::output_dir(None).unwrap();
     }
 
     #[test]

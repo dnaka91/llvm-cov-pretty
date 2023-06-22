@@ -60,8 +60,10 @@ fn main() -> Result<()> {
             .wrap_err("failed parsing report data from STDIN")?
     };
 
-    let project_dir = cargo::project_dir().wrap_err("failed to locate project directory")?;
-    let output_dir = cargo::output_dir().wrap_err("failed to locate output directory")?;
+    let project_dir = cargo::project_dir(cli.manifest_path.as_deref())
+        .wrap_err("failed to locate project directory")?;
+    let output_dir = cargo::output_dir(cli.manifest_path.as_deref())
+        .wrap_err("failed to locate output directory")?;
 
     let files = collect_project_files(&project_dir)?;
     let mut files = merge_file_info(files, &export.files);
@@ -189,10 +191,7 @@ fn segments_to_ranges(
 
 fn merge_function_info(files: &mut Vec<FileInfo>, functions: &[schema::Function]) {
     files.par_iter_mut().for_each(|file| {
-        for function in functions
-            .iter()
-            .filter(|f| f.filenames[0] == file.path)
-        {
+        for function in functions.iter().filter(|f| f.filenames[0] == file.path) {
             for region in &function.regions {
                 if region.execution_count > 0 {
                     file.called

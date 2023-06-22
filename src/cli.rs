@@ -24,6 +24,9 @@ pub struct Cli {
     /// The highlighting theme to use, if not disabled.
     #[arg(long, default_value_t = Theme::OneHalf)]
     pub theme: Theme,
+    /// Location of the project's Cargo.toml, in case the default detection isn't sufficient.
+    #[arg(long)]
+    pub manifest_path: Option<Utf8PathBuf>,
     /// Input coverage file encoded as JSON, or STDIN if omitted.
     pub input: Option<Utf8PathBuf>,
     #[command(subcommand)]
