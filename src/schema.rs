@@ -119,7 +119,7 @@ pub struct Function {
     ///
     /// As a function is usually defined in only one place, this should always contain a single
     /// entry.
-    pub filenames: Vec<Utf8PathBuf>,
+    pub filenames: [Utf8PathBuf; 1],
 }
 
 pub struct Region {

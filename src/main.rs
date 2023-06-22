@@ -191,7 +191,7 @@ fn merge_function_info(files: &mut Vec<FileInfo>, functions: &[schema::Function]
     files.par_iter_mut().for_each(|file| {
         for function in functions
             .iter()
-            .filter(|f| f.filenames.iter().any(|name| name == &file.path))
+            .filter(|f| f.filenames[0] == file.path)
         {
             for region in &function.regions {
                 if region.execution_count > 0 {
