@@ -2,21 +2,23 @@
 
 All notable changes to this project will be documented in this file.
 
-## [unreleased]
+## [0.1.1] - 2023-06-22
 
 ### Bug Fixes
 
 - Don't show a 0 count if coverage is unknown ([6cd93f8](https://github.com/dnaka91/llvm-cov-pretty/commit/6cd93f8))
 - Reduce gaps in colored coverage areas ([1094cfa](https://github.com/dnaka91/llvm-cov-pretty/commit/1094cfa))
+- Handle the case where report paths are relative ([94ae77a](https://github.com/dnaka91/llvm-cov-pretty/commit/94ae77a))
 
 ### Documentation
 
 - Partially document code parts ([2518ff7](https://github.com/dnaka91/llvm-cov-pretty/commit/2518ff7))
+- Include commit hashes in the changelog ([d5befa1](https://github.com/dnaka91/llvm-cov-pretty/commit/d5befa1))
 
 ### Features
 
 - Process coverage data and files in parallel ([d253d0f](https://github.com/dnaka91/llvm-cov-pretty/commit/d253d0f))
-- Add version check for cargo-llvm-cov ([227fca0](https://github.com/dnaka91/llvm-cov-pretty/commit/227fca0))
+- Add version check for cargo-llvm-cov ([624ab1c](https://github.com/dnaka91/llvm-cov-pretty/commit/624ab1c))
 
 ### Miscellaneous Tasks
 
@@ -27,6 +29,7 @@ All notable changes to this project will be documented in this file.
 
 - Use askama's escape function during highlighting ([e599493](https://github.com/dnaka91/llvm-cov-pretty/commit/e599493))
 - Simplify function name demangling ([52ff0ea](https://github.com/dnaka91/llvm-cov-pretty/commit/52ff0ea))
+- Improve logic to locate the project root ([593d315](https://github.com/dnaka91/llvm-cov-pretty/commit/593d315))
 
 ## [0.1.0] - 2023-06-18
 
