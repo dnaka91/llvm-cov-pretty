@@ -1,3 +1,5 @@
+//! Logic for minifying HTML content.
+
 pub struct Minifier(minify_html::Cfg);
 
 impl Minifier {
@@ -12,5 +14,24 @@ impl Minifier {
 
     pub fn minify(&self, html: impl AsRef<[u8]>) -> Vec<u8> {
         minify_html::minify(html.as_ref(), &self.0)
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use indoc::indoc;
+
+    #[test]
+    fn run_minifier() {
+        let min = super::Minifier::new().minify(indoc! {"
+            <p>
+                <span>te</span>
+                <span>st</span>
+            </p>
+        "});
+        assert_eq!(
+            "<p><span>te</span> <span>st</span></p>",
+            String::from_utf8(min).unwrap()
+        );
     }
 }

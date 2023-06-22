@@ -1,10 +1,23 @@
+//! Logic for turning plain text source code into HTML spans for code highlighting.
+//!
+//! Each line of source code is processed and turned into a set of HTML spans with CSS classes.
+//! Those classes define the coloring of each piece of code. The exact coloring is defined in a
+//! separate CSS file, which can be selected during code generation by a theme name.
+
 use std::fmt::{Display, Write};
 
 use anyhow::Result;
 use camino::Utf8Path;
 use syntect::parsing::{ParseState, Scope, ScopeStack, ScopeStackOp, SyntaxSet, SCOPE_REPO};
 
+/// The highlighter is the main component that performs transformation of plain source code into
+/// highlighted HTML tags.
+///
+/// It should be shared whenever possible, instead of cloning instances. This is to prevent the
+/// repeated (relatively slow) generation of required state.
 pub struct Highlighter {
+    /// Collection of syntaxes, that can parse source code into ASTs (**a**bstract **s**yntax
+    /// **t**ree), that can then be further turned into scopes for highlighting.
     ps: SyntaxSet,
 }
 
@@ -15,6 +28,7 @@ impl Highlighter {
         }
     }
 
+    /// Read the file at the given path and turn each line into annotated HTML content.
     pub fn file_to_spans(&self, file: &Utf8Path, no_highlight: bool) -> Result<Vec<String>> {
         let content = std::fs::read_to_string(file)?;
         let syntax = self.ps.find_syntax_by_extension("rs").unwrap();
@@ -36,6 +50,7 @@ impl Highlighter {
     }
 }
 
+/// Convert a single source code line into a set of HTML spans.
 fn line_tokens_to_span(
     line: &str,
     ops: &[(usize, ScopeStackOp)],
@@ -60,7 +75,9 @@ fn line_tokens_to_span(
     Ok(buf)
 }
 
+/// Append a span to the given buffer, wrapping it in a span with the corresponding CSS classes.
 fn append_span(buf: &mut String, scopes: &[Scope], line: &str) -> Result<(), std::fmt::Error> {
+    // No point in highlighting whitespace, so we can skip the overhead of a span around it.
     if line.chars().all(char::is_whitespace) {
         return write!(buf, "{}", escape(line));
     }
@@ -80,6 +97,7 @@ fn append_span(buf: &mut String, scopes: &[Scope], line: &str) -> Result<(), std
     Ok(())
 }
 
+/// Turn the current code scope into a list of CSS classes and append them to the buffer.
 fn scope_to_classes(s: &mut String, scope: Scope) {
     let repo = SCOPE_REPO.lock().unwrap();
     for i in (0..scope.len()).rev() {
@@ -95,6 +113,8 @@ fn scope_to_classes(s: &mut String, scope: Scope) {
     }
 }
 
+/// Escape the content into HTML-safe text, so it can be combined in a template without causing
+/// clashes with surrounding HTML tags.
 fn escape(value: &str) -> impl Display + '_ {
     askama_escape::escape(value, askama_escape::Html)
 }

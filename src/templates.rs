@@ -8,25 +8,40 @@ use time::OffsetDateTime;
 
 use crate::schema;
 
+/// Global constant instance with this project's info, so it doesn't have to be included as part of
+/// each template struct.
 const PROJECT: Project = Project {
     name: env!("CARGO_PKG_NAME"),
     repository: env!("CARGO_PKG_REPOSITORY"),
     version: env!("CARGO_PKG_VERSION"),
 };
 
+/// Basic information about this project, and not the project being invoked on. This data is used
+/// throughout the templates to generate footer information at the end of the content.
 struct Project {
+    /// Name of this project (not the project the report is generated for).
     name: &'static str,
+    /// Source code location.
     repository: &'static str,
+    /// Current version.
     version: &'static str,
 }
 
+/// Location and coverage information of a single file.
 pub struct FileInfo {
+    /// Absolute path to the file.
     pub path: Utf8PathBuf,
+    /// File path relative to the project root.
     pub relative_path: Utf8PathBuf,
+    /// Coverage information that sums up the information of all files.
     pub summary: schema::Summary,
+    /// Mapping from source lines to coverage hit counts.
     pub covered: HashMap<usize, u64>,
+    /// Set of uncovered lines.
     pub uncovered: HashSet<usize>,
+    /// Mapping from source lines to instantiated function calls and their hit counts.
     pub called: HashMap<usize, Vec<(String, u64)>>,
+    /// Set of uninstantiated function calls.
     pub uncalled: HashMap<usize, Vec<String>>,
 }
 
@@ -96,5 +111,58 @@ mod filters {
             v if v > 50.0 => CoverageLevel::Medium,
             _ => CoverageLevel::Low,
         })
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use std::collections::{HashMap, HashSet};
+
+    use askama::Template;
+    use camino::Utf8PathBuf;
+    use time::OffsetDateTime;
+
+    use super::FileInfo;
+    use crate::schema;
+
+    #[test]
+    fn render_index() {
+        super::Index {
+            title: "",
+            base_dir: "",
+            generated: OffsetDateTime::UNIX_EPOCH,
+            files: &[FileInfo {
+                path: Utf8PathBuf::from("/home/user/project/src/file.rs"),
+                relative_path: Utf8PathBuf::from("src/file.rs"),
+                summary: schema::Summary::default(),
+                covered: HashMap::default(),
+                uncovered: HashSet::default(),
+                called: HashMap::default(),
+                uncalled: HashMap::default(),
+            }],
+            totals: &schema::Summary::default(),
+        }
+        .render()
+        .unwrap();
+    }
+
+    #[test]
+    fn render_source() {
+        super::Source {
+            title: "",
+            base_dir: "",
+            lines: &[String::from("test")],
+            info: &FileInfo {
+                path: Utf8PathBuf::from("/home/user/project/src/file.rs"),
+                relative_path: Utf8PathBuf::from("src/file.rs"),
+                summary: schema::Summary::default(),
+                covered: HashMap::default(),
+                uncovered: HashSet::default(),
+                called: HashMap::default(),
+                uncalled: HashMap::default(),
+            },
+        }
+        .render()
+        .unwrap();
     }
 }

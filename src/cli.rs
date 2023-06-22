@@ -1,3 +1,5 @@
+//! Handling of command line arguments.
+
 use std::{
     fs::OpenOptions,
     io::{self, BufWriter, Write},
@@ -29,6 +31,7 @@ pub struct Cli {
 }
 
 impl Cli {
+    /// Parse the command line arguments passed to the program.
     pub fn parse() -> Self {
         <Self as Parser>::parse()
     }
@@ -50,6 +53,7 @@ pub enum Command {
     },
 }
 
+/// Generate shell completions for the given shell variant and write the to STDOUT.
 pub fn completions(shell: Shell) {
     clap_complete::generate(
         shell,
@@ -59,6 +63,11 @@ pub fn completions(shell: Shell) {
     );
 }
 
+/// Generate `man` pages and write them into the given directory.
+///
+/// The output directory must already exist, but if a file with the same name as a man page already
+/// exists, an error will be returned. This behavior ensures that we don't accidentally overwrite
+/// any existing files (in case the wrong folder was picked by accident).
 pub fn manpages(dir: &Utf8Path) -> Result<()> {
     fn print(dir: &Utf8Path, app: &clap::Command) -> Result<()> {
         let name = app.get_display_name().unwrap_or_else(|| app.get_name());

@@ -185,12 +185,12 @@ fn merge_function_info(files: &mut Vec<FileInfo>, functions: &[schema::Function]
             for region in &function.regions {
                 if region.execution_count > 0 {
                     file.called
-                        .entry(region.line_start as usize)
+                        .entry(region.start.0 as usize)
                         .or_default()
                         .push((function.name.clone(), region.execution_count));
                 } else {
                     file.uncalled
-                        .entry(region.line_start as usize)
+                        .entry(region.start.0 as usize)
                         .or_default()
                         .push(function.name.clone());
                 }
