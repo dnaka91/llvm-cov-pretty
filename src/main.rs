@@ -145,7 +145,13 @@ fn merge_file_info(
     files
         .into_par_iter()
         .filter_map(|(path, relative_path)| {
-            let info = coverage.iter().find(|info| info.filename == path)?;
+            let info = coverage.iter().find(|info| {
+                if info.filename.is_absolute() {
+                    info.filename == path
+                } else {
+                    info.filename == relative_path
+                }
+            })?;
 
             Some(FileInfo {
                 path,
