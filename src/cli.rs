@@ -18,9 +18,9 @@ pub struct Cli {
     /// Disable any code highlighting.
     #[arg(long)]
     pub no_highlight: bool,
-    /// Disable annotations for missing instantiations.
+    /// Show annotations for missing instantiations.
     #[arg(long)]
-    pub no_instantiations: bool,
+    pub show_instantiations: bool,
     /// The highlighting theme to use, if not disabled.
     #[arg(long, default_value_t = Theme::OneHalf)]
     pub theme: Theme,

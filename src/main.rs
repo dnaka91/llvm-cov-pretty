@@ -68,7 +68,7 @@ fn main() -> Result<()> {
     let files = collect_project_files(&project_dir)?;
     let mut files = merge_file_info(files, &export.files);
 
-    if !cli.no_instantiations {
+    if cli.show_instantiations {
         merge_function_info(&mut files, &export.functions);
     }
 
