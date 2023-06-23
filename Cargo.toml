@@ -35,6 +35,7 @@ clap_mangen = "0.2.12"
 color-eyre = { version = "0.6.2", default-features = false }
 ignore = "0.4.20"
 minify-html = "0.11.1"
+open = "4.2.0"
 rayon = "1.7.0"
 rustc-demangle = "0.1.23"
 semver = "1.0.17"

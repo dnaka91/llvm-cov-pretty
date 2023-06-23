@@ -81,8 +81,10 @@ fn main() -> Result<()> {
     let minifier = Minifier::new();
     let highlighter = Highlighter::new();
 
+    let index_path = output_dir.join("index.html");
+
     fs::write(
-        output_dir.join("index.html"),
+        &index_path,
         minifier.minify(
             templates::Index {
                 title: "Index",
@@ -125,6 +127,15 @@ fn main() -> Result<()> {
 
         Ok::<_, Error>(())
     })?;
+
+    if cli.open {
+        open::that(index_path)?;
+    } else {
+        println!(
+            "report generated at {:?}",
+            index_path.strip_prefix(project_dir).unwrap_or(&index_path)
+        );
+    }
 
     Ok(())
 }

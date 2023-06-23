@@ -31,6 +31,9 @@ pub struct Cli {
     /// Location of the project's Cargo.toml, in case the default detection isn't sufficient.
     #[arg(long, value_hint = ValueHint::FilePath, value_name = "PATH")]
     pub manifest_path: Option<Utf8PathBuf>,
+    /// Open the report in the default application after it's been generated.
+    #[arg(long)]
+    pub open: bool,
     /// Input coverage file encoded as JSON, or STDIN if omitted.
     #[arg(value_hint = ValueHint::FilePath)]
     pub input: Option<Utf8PathBuf>,
