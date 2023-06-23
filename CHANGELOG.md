@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.1.3] - 2023-06-23
+
+### Bug Fixes
+
+- Cover the full line range of instantiation data ([9303b6b](https://github.com/dnaka91/llvm-cov-pretty/commit/9303b6b))
+
+### Features
+
+- Add option to automatically open the report and print the location otherwise ([88fb877](https://github.com/dnaka91/llvm-cov-pretty/commit/88fb877))
+- Use the relative path in the source page to be in sync with the index ([67c9816](https://github.com/dnaka91/llvm-cov-pretty/commit/67c9816))
+
 ## [0.1.2] - 2023-06-22
 
 ### Bug Fixes
@@ -20,6 +31,10 @@ All notable changes to this project will be documented in this file.
 - Make annotations for missing instantations opt-in ([d798f5a](https://github.com/dnaka91/llvm-cov-pretty/commit/d798f5a))
 - Ensure files lists are always sorted alphabetically ([2b898f8](https://github.com/dnaka91/llvm-cov-pretty/commit/2b898f8))
 - Add option to only highlight the gutter for coverage info ([97b359c](https://github.com/dnaka91/llvm-cov-pretty/commit/97b359c))
+
+### Miscellaneous Tasks
+
+- Prepare for v0.1.2 ([f816f27](https://github.com/dnaka91/llvm-cov-pretty/commit/f816f27))
 
 ### Refactor
 
