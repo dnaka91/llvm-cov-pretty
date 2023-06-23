@@ -196,15 +196,19 @@ fn merge_function_info(files: &mut Vec<FileInfo>, functions: &[schema::Function]
         for function in functions.iter().filter(|f| f.filenames[0] == file.path) {
             for region in &function.regions {
                 if region.execution_count > 0 {
-                    file.called
-                        .entry(region.start.0 as usize)
-                        .or_default()
-                        .push((function.name.clone(), region.execution_count));
+                    for line in region.start.0..=region.end.0 {
+                        file.called
+                            .entry(line as usize)
+                            .or_default()
+                            .push((function.name.clone(), region.execution_count));
+                    }
                 } else {
-                    file.uncalled
-                        .entry(region.start.0 as usize)
-                        .or_default()
-                        .push(function.name.clone());
+                    for line in region.start.0..=region.end.0 {
+                        file.uncalled
+                            .entry(line as usize)
+                            .or_default()
+                            .push(function.name.clone());
+                    }
                 }
             }
         }
