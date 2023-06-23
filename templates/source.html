@@ -7,7 +7,7 @@
 
 {% block content %}
 <div class="source-area">
-  <p class="source-path">{{info.path}}</p>
+  <p class="source-path">{{info.relative_path}}</p>
   <div class="source-coverage">
     {% let percent = info.summary.lines.percent %}
     {% let color_text = "" %}
