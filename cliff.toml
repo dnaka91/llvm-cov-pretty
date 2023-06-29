@@ -27,6 +27,9 @@ body = """
         - {% if commit.breaking %}[**breaking**] {% endif %}\
           {{ commit.message | upper_first }} \
           ([{{ commit_id }}]({{ commit_url }}))\
+          {% if commit.body %}
+            {{ commit.body | indent(prefix="  > ", first=true, blank=true) }}\
+          {% endif %}\
     {% endfor %}
 {% endfor %}\n
 """

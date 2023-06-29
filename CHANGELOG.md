@@ -2,11 +2,23 @@
 
 All notable changes to this project will be documented in this file.
 
+## [unreleased]
+
+### Miscellaneous Tasks
+
+- Update dependencies ([dd1892f](https://github.com/dnaka91/llvm-cov-pretty/commit/dd1892f))
+
 ## [0.1.3] - 2023-06-23
 
 ### Bug Fixes
 
 - Cover the full line range of instantiation data ([9303b6b](https://github.com/dnaka91/llvm-cov-pretty/commit/9303b6b))
+  > At first, it looked like the instantiation coverage always defines a
+  > single line, but as it turns out there are cases where it streches over
+  > more than one line.
+  > 
+  > This data must be included to properly display the overrides for
+  > uncovered instantiations.
 
 ### Features
 
