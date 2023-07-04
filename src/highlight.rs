@@ -32,6 +32,12 @@ impl Highlighter {
     pub fn file_to_spans(&self, file: &Utf8Path, no_highlight: bool) -> Result<Vec<String>> {
         let content = std::fs::read_to_string(file)
             .wrap_err_with(|| format!("failed reading file contents from {file:?}"))?;
+
+        self.source_to_spans(&content, no_highlight)
+    }
+
+    /// Parse each line of the given content and turn it into annotated HTML content.
+    fn source_to_spans(&self, content: &str, no_highlight: bool) -> Result<Vec<String>> {
         let syntax = self
             .ps
             .find_syntax_by_extension("rs")
@@ -121,4 +127,39 @@ fn scope_to_classes(s: &mut String, scope: Scope) {
 /// clashes with surrounding HTML tags.
 fn escape(value: &str) -> impl Display + '_ {
     askama_escape::escape(value, askama_escape::Html)
+}
+
+#[cfg(test)]
+mod tests {
+    use indoc::indoc;
+
+    #[test]
+    fn run_highlighter() {
+        let output = super::Highlighter::new()
+            .source_to_spans(
+                indoc! {r#"
+                let a = "
+                    test
+                ";
+            "#},
+                false,
+            )
+            .unwrap();
+        let expect = vec![
+            "<span class=\"syntect-rust syntect-type syntect-storage\">let</span><span \
+             class=\"syntect-rust syntect-source\"> a </span><span class=\"syntect-rust \
+             syntect-operator syntect-keyword\">=</span> <span class=\"syntect-rust syntect-begin \
+             syntect-string syntect-definition syntect-punctuation\">&quot;</span>"
+                .to_owned(),
+            "<span class=\"syntect-rust syntect-double syntect-quoted syntect-string\">    \
+             test</span>"
+                .to_owned(),
+            "<span class=\"syntect-rust syntect-end syntect-string syntect-definition \
+             syntect-punctuation\">&quot;</span><span class=\"syntect-rust syntect-terminator \
+             syntect-punctuation\">;</span>"
+                .to_owned(),
+        ];
+
+        assert_eq!(expect, output);
+    }
 }

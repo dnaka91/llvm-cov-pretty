@@ -23,15 +23,14 @@ mod tests {
 
     #[test]
     fn run_minifier() {
-        let min = super::Minifier::new().minify(indoc! {"
+        let output = super::Minifier::new().minify(indoc! {"
             <p>
                 <span>te</span>
                 <span>st</span>
             </p>
         "});
-        assert_eq!(
-            "<p><span>te</span> <span>st</span></p>",
-            String::from_utf8(min).unwrap()
-        );
+        let expect = "<p><span>te</span> <span>st</span></p>";
+
+        assert_eq!(expect, String::from_utf8(output).unwrap());
     }
 }
