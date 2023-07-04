@@ -52,12 +52,11 @@ fn main() -> Result<()> {
 
     let JsonExport { data: [export], .. } = if let Some(input) = cli.input {
         let file = BufReader::new(File::open(&input)?);
-        serde_json::from_reader::<_, JsonExport>(file)
+        JsonExport::from_reader(file)
             .wrap_err_with(|| format!("failed parsing report data from {input:?}"))?
     } else {
         let stdin = std::io::stdin().lock();
-        serde_json::from_reader::<_, JsonExport>(stdin)
-            .wrap_err("failed parsing report data from STDIN")?
+        JsonExport::from_reader(stdin).wrap_err("failed parsing report data from STDIN")?
     };
 
     let project_dir = cargo::project_dir(cli.manifest_path.as_deref())
