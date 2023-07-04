@@ -36,7 +36,7 @@ impl JsonExport {
         )
         .map_err(|e| {
             let path = e.path().to_string();
-            eyre::Report::new(e).note(format!("JSON path: {path}"))
+            eyre::Report::new(e.into_inner()).note(format!("JSON path: {path}"))
         })
     }
 }
