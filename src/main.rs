@@ -48,9 +48,11 @@ fn main() -> Result<()> {
         return Ok(());
     }
 
-    cargo::check_version().wrap_err("failed checking cargo-llvm-cov version")?;
-
-    let JsonExport { data: [export], .. } = if let Some(input) = cli.input {
+    let JsonExport {
+        data: [export],
+        cargo_llvm_cov,
+        ..
+    } = if let Some(input) = cli.input {
         let file = BufReader::new(File::open(&input)?);
         JsonExport::from_reader(file)
             .wrap_err_with(|| format!("failed parsing report data from {input:?}"))?
@@ -59,10 +61,18 @@ fn main() -> Result<()> {
         JsonExport::from_reader(stdin).wrap_err("failed parsing report data from STDIN")?
     };
 
-    let project_dir = cargo::project_dir(cli.manifest_path.as_deref())
-        .wrap_err("failed to locate project directory")?;
-    let output_dir = cargo::output_dir(cli.manifest_path.as_deref())
-        .wrap_err("failed to locate output directory")?;
+    cargo::check_version(cargo_llvm_cov.as_ref().map(|v| v.version.clone()))
+        .wrap_err("failed checking cargo-llvm-cov version")?;
+
+    let manifest_path = cli
+        .manifest_path
+        .as_deref()
+        .or(cargo_llvm_cov.as_ref().map(|v| v.manifest_path.as_ref()));
+
+    let project_dir =
+        cargo::project_dir(manifest_path).wrap_err("failed to locate project directory")?;
+    let output_dir =
+        cargo::output_dir(manifest_path).wrap_err("failed to locate output directory")?;
 
     let files = collect_project_files(&project_dir)?;
     let mut files = merge_file_info(files, &export.files);

@@ -5,6 +5,7 @@ use color_eyre::{
     eyre::{ensure, eyre, Context, Result},
     Help, SectionExt,
 };
+use semver::Version;
 use serde::Deserialize;
 
 /// Locate the root directory of the project under the current working directory.
@@ -90,8 +91,8 @@ fn cargo_metadata(manifest_path: &Utf8Path) -> Result<Metadata> {
 
 /// Ensure the globally installed `cargo-llvm-cov` is a recent _known-to-be-working_ version, to
 /// avoid possible errors due to different output in older versions.
-pub fn check_version() -> Result<()> {
-    use semver::{Comparator, Op, Prerelease, Version};
+pub fn check_version(version: Option<Version>) -> Result<()> {
+    use semver::{Comparator, Op, Prerelease};
 
     static MIN_VERSION: Comparator = Comparator {
         op: Op::GreaterEq,
@@ -101,31 +102,35 @@ pub fn check_version() -> Result<()> {
         pre: Prerelease::EMPTY,
     };
 
-    let output = Command::new("cargo-llvm-cov")
-        .args(["llvm-cov", "--version"])
-        .output()?;
+    let version = if let Some(version) = version {
+        version
+    } else {
+        let output = Command::new("cargo-llvm-cov")
+            .args(["llvm-cov", "--version"])
+            .output()?;
 
-    if !output.status.success() {
-        let stdout = String::from_utf8_lossy(&output.stdout);
-        let stderr = String::from_utf8_lossy(&output.stderr);
-        return Err(eyre!("failed running cargo-llvm-cov (llvm-cov --version)")
-            .with_section(move || stdout.to_string().header("Stdout:"))
-            .with_section(move || stderr.to_string().header("Stderr:"))
-            .suggestion("ensure it is installed and available on your $PATH"));
-    }
+        if !output.status.success() {
+            let stdout = String::from_utf8_lossy(&output.stdout);
+            let stderr = String::from_utf8_lossy(&output.stderr);
+            return Err(eyre!("failed running cargo-llvm-cov (llvm-cov --version)")
+                .with_section(move || stdout.to_string().header("Stdout:"))
+                .with_section(move || stderr.to_string().header("Stderr:"))
+                .suggestion("ensure it is installed and available on your $PATH"));
+        }
 
-    let output = String::from_utf8_lossy(&output.stdout);
-    let (name, version) = output
-        .trim()
-        .split_once(' ')
-        .ok_or_else(|| eyre!("no separator between name and version"))?;
+        let output = String::from_utf8_lossy(&output.stdout);
+        let (name, version) = output
+            .trim()
+            .split_once(' ')
+            .ok_or_else(|| eyre!("no separator between name and version"))?;
 
-    ensure!(
-        name == "cargo-llvm-cov",
-        "program doesn't appear to be cargo-llvm-cov"
-    );
+        ensure!(
+            name == "cargo-llvm-cov",
+            "program doesn't appear to be cargo-llvm-cov"
+        );
 
-    let version = version.parse::<Version>()?;
+        version.parse::<Version>()?
+    };
 
     ensure!(
         MIN_VERSION.matches(&version),
@@ -160,6 +165,6 @@ mod tests {
 
     #[test]
     fn check_version() {
-        super::check_version().unwrap();
+        super::check_version(None).unwrap();
     }
 }

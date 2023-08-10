@@ -28,9 +28,9 @@ include = [
 [dependencies]
 askama = { version = "0.12.0", default-features = false }
 askama_escape = "0.10.3"
-camino = { version = "1.1.4", features = ["serde1"] }
-clap = { version = "4.3.10", features = ["derive"] }
-clap_complete = "4.3.1"
+camino = { version = "1.1.6", features = ["serde1"] }
+clap = { version = "4.3.21", features = ["derive"] }
+clap_complete = "4.3.2"
 clap_mangen = "0.2.12"
 color-eyre = { version = "0.6.2", default-features = false }
 ignore = "0.4.20"
@@ -38,27 +38,27 @@ minify-html = "0.11.1"
 open = "5.0.0"
 rayon = "1.7.0"
 rustc-demangle = "0.1.23"
-semver = "1.0.17"
-serde = { version = "1.0.166", features = ["derive"] }
-serde_json = "1.0.99"
-serde_path_to_error = "0.1.12"
-time = { version = "0.3.22", features = ["formatting", "local-offset", "macros"] }
+semver = { version = "1.0.18", features = ["serde"] }
+serde = { version = "1.0.183", features = ["derive"] }
+serde_json = "1.0.104"
+serde_path_to_error = "0.1.14"
+time = { version = "0.3.25", features = ["formatting", "local-offset", "macros"] }
 
 [dependencies.syntect]
-version = "5.0.0"
+version = "5.1.0"
 default-features = false
 features = ["default-syntaxes", "parsing", "regex-fancy"]
 
 [dev-dependencies]
-indoc = "2.0.2"
+indoc = "2.0.3"
 
 [build-dependencies]
 css-minify = "0.3.1"
 heck = "0.4.1"
-quote = "1.0.29"
+quote = "1.0.32"
 
 [build-dependencies.syntect]
-version = "5.0.0"
+version = "5.1.0"
 default-features = false
 features = ["default-themes", "html", "plist-load", "regex-fancy"]
 
