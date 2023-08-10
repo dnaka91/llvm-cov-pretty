@@ -69,12 +69,12 @@ There are a few extra commands (like generating shell completions) and options (
 
 To start developing on the project, you'll need a few extra step in addition to the ones described in the [From source](#from-source) section.
 
-- Install a recent version of Node.js and Yarn (usually comes bundled with Node.js).
+- Install a recent version of Node.js and PNPM.
 - Ensure all submodules are initialized with `git submodule update --init`.
 
-Then open up a new terminal and execute `yarn run watch`. It will watch the project files and rebuild the stylesheet at `assets/style.css` when needed. With that you're ready to hack along.
+Then open up a new terminal and execute `pnpm run watch`. It will watch the project files and rebuild the stylesheet at `assets/style.css` when needed. With that you're ready to hack along.
 
-Before you create a custom build, it's recommended to stop the watch job again and run `yarn run build` once, which will create a minified and optimized version of the stylesheet. It is compiled into the binary during builds.
+Before you create a custom build, it's recommended to stop the watch job again and run `pnpm run build` once, which will create a minified and optimized version of the stylesheet. It is compiled into the binary during builds.
 
 ## License
 

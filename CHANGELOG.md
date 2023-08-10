@@ -2,11 +2,31 @@
 
 All notable changes to this project will be documented in this file.
 
-## [unreleased]
+## [0.1.4] - 2023-08-10
+
+### Features
+
+- Report the JSON path of in case of a parsing error ([b0a3497](https://github.com/dnaka91/llvm-cov-pretty/commit/b0a3497))
+  > If deserialization of the coverage data failed, and the cause is an
+  > invalid or unexpected structure, the JSON path to the location of the
+  > error is reported.
+- Use new cargo-llvm-cov context data ([a03b5cf](https://github.com/dnaka91/llvm-cov-pretty/commit/a03b5cf))
+  > With a recent release of `cargo-llvm-cov`, additional data is injected
+  > into the coverage JSON report. This allows for easier version checks and
+  > location of the project's manifest file.
 
 ### Miscellaneous Tasks
 
 - Update dependencies ([dd1892f](https://github.com/dnaka91/llvm-cov-pretty/commit/dd1892f))
+- Switch form yarn to pnpm ([cb80299](https://github.com/dnaka91/llvm-cov-pretty/commit/cb80299))
+
+### Refactor
+
+- Don't double-print the JSON path ([9f84893](https://github.com/dnaka91/llvm-cov-pretty/commit/9f84893))
+
+### Testing
+
+- Add unit tests for highlighter, minifier and schema parsing ([6f0d782](https://github.com/dnaka91/llvm-cov-pretty/commit/6f0d782))
 
 ## [0.1.3] - 2023-06-23
 
