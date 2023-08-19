@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.1.5] - 2023-08-19
+
+### Miscellaneous Tasks
+
+- Avoid pre-compiled binaries from serde ([6ea517d](https://github.com/dnaka91/llvm-cov-pretty/commit/6ea517d))
+  > Pin `serde` to `1.0.171` to avoid pre-compiled binaries that are used
+  > after for derive macros.
+
 ## [0.1.4] - 2023-08-10
 
 ### Features
