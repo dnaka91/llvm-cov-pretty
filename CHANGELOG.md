@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.1.6] - 2023-08-23
+
+### Miscellaneous Tasks
+
+- Unpin serde again ([2ee8806](https://github.com/dnaka91/llvm-cov-pretty/commit/2ee8806))
+  > The issue with pre-compiled binaries in `serde` has been resolved.
+  > Therefore, the pin can be removed, but a minimum version of `1.0.185` is
+  > required.
+
 ## [0.1.5] - 2023-08-19
 
 ### Miscellaneous Tasks

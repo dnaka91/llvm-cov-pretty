@@ -1,6 +1,6 @@
 [package]
 name = "llvm-cov-pretty"
-version = "0.1.5"
+version = "0.1.6"
 authors = ["Dominik Nakamura <dnaka91@gmail.com>"]
 edition = "2021"
 description = "More beautiful HTML reports for llvm-cov/cargo-llvm-cov"
