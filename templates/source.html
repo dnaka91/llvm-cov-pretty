@@ -50,8 +50,10 @@
         {% match coverage %}
           {% when Coverage::Covered(_) %}
             {% let class = "covered" %}
-          {% when Coverage::Uncovered(_) %}
+          {% when Coverage::Uncovered(0) %}
             {% let class = "uncovered" %}
+          {% when Coverage::Uncovered(_) %}
+            {% let class = "partially-covered" %}
           {% when Coverage::Unknown %}
             {% let class = "" %}
         {% endmatch %}

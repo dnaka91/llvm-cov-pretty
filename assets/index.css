@@ -130,12 +130,20 @@
     @apply bg-red-400 hover:bg-red-500 dark:bg-red-800 dark:hover:bg-red-700;
   }
 
+  .partially-covered {
+    @apply bg-yellow-400 hover:bg-yellow-500 dark:bg-yellow-800 dark:hover:bg-yellow-700;
+  }
+
   .gutter.covered {
     @apply bg-green-400 dark:bg-green-800 !important;
   }
 
   .gutter.uncovered {
     @apply bg-red-400 dark:bg-red-800 !important;
+  }
+
+  .gutter.partially-covered {
+    @apply bg-yellow-400 dark:bg-yellow-800 !important;
   }
 
   .page-footer {
