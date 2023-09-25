@@ -13,6 +13,7 @@ use color_eyre::eyre::{ensure, Result, WrapErr};
 
 use crate::styles::Theme;
 
+#[allow(clippy::struct_excessive_bools)]
 #[derive(Parser)]
 #[command(about, author, version)]
 pub struct Cli {
@@ -34,6 +35,9 @@ pub struct Cli {
     /// Open the report in the default application after it's been generated.
     #[arg(long)]
     pub open: bool,
+    /// Skip overlaying regular file coverage with function invocation coverage (in source views).
+    #[arg(long)]
+    pub skip_function_coverage: bool,
     /// Input coverage file encoded as JSON, or STDIN if omitted.
     #[arg(value_hint = ValueHint::FilePath)]
     pub input: Option<Utf8PathBuf>,

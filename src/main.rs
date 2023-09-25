@@ -128,6 +128,7 @@ fn main() -> Result<()> {
                     info: &file,
                     coverage_style: cli.coverage_style,
                     show_instantiations: cli.show_instantiations,
+                    overlay_instantations: !cli.skip_function_coverage,
                 }
                 .render()?
                 .as_bytes(),
