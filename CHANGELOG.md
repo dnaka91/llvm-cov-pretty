@@ -5,6 +5,33 @@ All notable changes to this project will be documented in this file.
 <!-- markdownlint-disable no-duplicate-header -->
 <!-- markdownlint-disable no-trailing-spaces -->
 
+## [0.1.7](https://github.com/dnaka91/wazzup/compare/v0.1.6...v0.1.7) - 2023-09-25
+
+### <!-- 0 -->⛰️ Features
+
+- Mark partially-covered lines in yellow ([e3eafbd](https://github.com/dnaka91/wazzup/commit/e3eafbdd3a9bd998a5d371a0369a19f998bc964d))
+  > So far lines that are covered but have missing function calls
+  > (instantiations) were marked with red. To better indicate that they're
+  > basically called but have a few missing instantiations a new yellow
+  > color is introduced for those.
+- Sort and deduplicate annotation messages ([fbcaf0e](https://github.com/dnaka91/wazzup/commit/fbcaf0eb85681e555292fc1052e50c42a79947e2))
+  > The opt-in annotations for missing function calls and instantiations
+  > are now sorted alphabetically and deduplicated to reduce the amount of
+  > vertical space occupied.
+- Add a new flag to disable usage of function coverage ([5dd1824](https://github.com/dnaka91/wazzup/commit/5dd18245a7632b10eee7243af031fb79ff4c2791))
+  > A new flag that allows to opt-out of utilizing the function coverage
+  > information in the source view. That means only basic file coverage will
+  > be used if this flag is used.
+  > 
+  > Overview pages will still show the function coverage percentages
+  > accordingly, regardless of the flag.
+
+### <!-- 2 -->📚 Documentation
+
+- Improve changelog format ([2662278](https://github.com/dnaka91/wazzup/commit/266227895382700d0c56c434d4c75597094c2012))
+  > Extend the changelog generator to create prettier changelogs, similar to
+  > how the changelog in the `git-cliff` tool itself looks.
+
 ## [0.1.6](https://github.com/dnaka91/wazzup/compare/v0.1.5...v0.1.6) - 2023-08-23
 
 ### <!-- 7 -->⚙️ Miscellaneous Tasks
