@@ -1,6 +1,6 @@
 #![allow(clippy::trivially_copy_pass_by_ref, clippy::unnecessary_wraps)]
 
-use std::collections::{HashMap, HashSet, BTreeSet};
+use std::collections::{BTreeSet, HashMap, HashSet};
 
 use askama::Template;
 use camino::Utf8PathBuf;
