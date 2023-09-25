@@ -1,6 +1,6 @@
 #![allow(clippy::trivially_copy_pass_by_ref, clippy::unnecessary_wraps)]
 
-use std::collections::{HashMap, HashSet};
+use std::collections::{HashMap, HashSet, BTreeSet};
 
 use askama::Template;
 use camino::Utf8PathBuf;
@@ -42,7 +42,7 @@ pub struct FileInfo {
     /// Mapping from source lines to instantiated function calls and their hit counts.
     pub called: HashMap<usize, Vec<(String, u64)>>,
     /// Set of uninstantiated function calls.
-    pub uncalled: HashMap<usize, Vec<String>>,
+    pub uncalled: HashMap<usize, BTreeSet<String>>,
 }
 
 #[derive(Template)]

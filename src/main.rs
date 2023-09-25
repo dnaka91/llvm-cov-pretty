@@ -227,7 +227,7 @@ fn merge_function_info(files: &mut Vec<FileInfo>, functions: &[schema::Function]
                         file.uncalled
                             .entry(line as usize)
                             .or_default()
-                            .push(function.name.clone());
+                            .insert(function.name.clone());
                     }
                 }
             }
