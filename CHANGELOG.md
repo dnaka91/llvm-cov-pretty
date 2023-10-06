@@ -5,6 +5,39 @@ All notable changes to this project will be documented in this file.
 <!-- markdownlint-disable no-duplicate-header -->
 <!-- markdownlint-disable no-trailing-spaces -->
 
+## [0.1.8](https://github.com/dnaka91/llvm-cov-pretty/compare/v0.1.7...v0.1.8) - 2023-10-06
+
+### <!-- 0 -->⛰️ Features
+
+- Allow to control the report's output directory ([458ede9](https://github.com/dnaka91/llvm-cov-pretty/commit/458ede98a235693ef7af80d913a744587b9e29d3))
+  > A new CLI flag that allows to save the report to a user-defined
+  > directory instead of the default `target/llvm-cov-pretty` location.
+  > 
+  > Caution should be taken as there is no additional logic for non-empty
+  > directories. The target directory will be fully wiped in the process of
+  > generating the report, without prior confirmation.
+- Enable auto-wrapping of CLI help messages ([86cd5c7](https://github.com/dnaka91/llvm-cov-pretty/commit/86cd5c7ad853570095e5aa0aec2fff39ce9b6c7e))
+  > By enabling clap's `wrap_help` feature, the help output is now nicely
+  > aligned to the terminal wraps, which makes it easier to read in case of
+  > longer help messages.
+
+### <!-- 1 -->🐛 Bug Fixes
+
+- Set link for first uncovered line ([481434a](https://github.com/dnaka91/llvm-cov-pretty/commit/481434a271553ce5fea32bb1efe442a46611776b))
+  > A link tag existed that should move to the first uncovered line in
+  > source view, but it never contained a proper working URL.
+  > 
+  > Also, the link won't be generated anymore if there aren't any uncovered
+  > lines in the file.
+
+### <!-- 2 -->📚 Documentation
+
+- Correct the repo URL of links in CHANGELOG.md ([178b848](https://github.com/dnaka91/llvm-cov-pretty/commit/178b84814997666d52fefbc533f902171000173a))
+  > In the previous improvement of the changelog format, the wrong
+  > repository URL slipped in the settings as the file was copied over from
+  > another project. This resulted in all link to point to the wrong
+  > location.
+
 ## [0.1.7](https://github.com/dnaka91/llvm-cov-pretty/compare/v0.1.6...v0.1.7) - 2023-09-25
 
 ### <!-- 0 -->⛰️ Features

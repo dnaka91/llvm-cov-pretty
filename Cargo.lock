@@ -563,7 +563,7 @@ checksum = "3852614a3bd9ca9804678ba6be5e3b8ce76dfc902cae004e3e0c44051b6e88db"
 
 [[package]]
 name = "llvm-cov-pretty"
-version = "0.1.7"
+version = "0.1.8"
 dependencies = [
  "askama",
  "askama_escape",
