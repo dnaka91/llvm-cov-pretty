@@ -68,6 +68,11 @@ pub struct Source<'a> {
 }
 
 impl<'a> Source<'a> {
+    fn get_first(&self) -> Option<usize> {
+        (1..=self.lines.len())
+            .find(|line| matches!(self.get_coverage(line), Coverage::Uncovered(_)))
+    }
+
     fn get_coverage(&self, index: &usize) -> Coverage {
         self.info
             .covered

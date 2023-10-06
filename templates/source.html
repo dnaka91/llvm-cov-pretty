@@ -36,7 +36,11 @@
       <tr>
         <th>Line</th>
         <th>Count</th>
-        <th>Source (<a>jump to first uncovered line</a>)</th>
+        <th>Source
+        {%- if let Some(line) = self.get_first() %}
+          (<a href="#L{{line}}">jump to first uncovered line</a>)
+        {% endif -%}
+        </th>
       </tr>
     </thead>
     <tbody class="syntect-code">
