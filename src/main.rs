@@ -71,8 +71,10 @@ fn main() -> Result<()> {
 
     let project_dir =
         cargo::project_dir(manifest_path).wrap_err("failed to locate project directory")?;
-    let output_dir =
-        cargo::output_dir(manifest_path).wrap_err("failed to locate output directory")?;
+    let output_dir = match cli.output_dir {
+        Some(dir) => dir,
+        None => cargo::output_dir(manifest_path).wrap_err("failed to locate output directory")?,
+    };
 
     let files = collect_project_files(&project_dir)?;
     let mut files = merge_file_info(files, &export.files);

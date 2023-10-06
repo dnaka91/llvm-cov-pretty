@@ -32,6 +32,15 @@ pub struct Cli {
     /// Location of the project's Cargo.toml, in case the default detection isn't sufficient.
     #[arg(long, value_hint = ValueHint::FilePath, value_name = "PATH")]
     pub manifest_path: Option<Utf8PathBuf>,
+    /// Alternative location to save the report files to, overriding the default.
+    ///
+    /// By default the report is saved to the `<CARGO_TARGET_DIR>/llvm-cov-pretty` directory, where
+    /// `<CARGO_TARGET_DIR>` is the output directory as configured for Cargo. This directory can be
+    /// influenced by various settings for Cargo as described here:
+    ///
+    /// https://doc.rust-lang.org/cargo/reference/config.html#buildtarget-dir
+    #[arg(long, value_hint = ValueHint::DirPath, value_name = "PATH")]
+    pub output_dir: Option<Utf8PathBuf>,
     /// Open the report in the default application after it's been generated.
     #[arg(long)]
     pub open: bool,
