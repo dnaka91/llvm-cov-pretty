@@ -297,10 +297,6 @@ pub struct CargoLlvmCov {
     /// The project's manifest path, as resolved by cargo-llvm-cov. Avoids a mismatch as a
     /// user-provided path has to be passed to both tools.
     pub manifest_path: Utf8PathBuf,
-    /// Additional arguments passed to Cargo.
-    pub cargo_args: Vec<String>,
-    /// additional arguments passed to the Cargo test run.
-    pub test_args: Vec<String>,
 }
 
 mod demangle {
@@ -337,7 +333,11 @@ mod demangle {
 mod tests {
     #![allow(clippy::too_many_lines)]
 
+    use camino::Utf8PathBuf;
+    use semver::Version;
     use serde_json::json;
+
+    use crate::schema::CargoLlvmCov;
 
     use super::{Export, File, Function, JsonExport, Region, RegionKind, Segment, Summary};
 
@@ -518,6 +518,66 @@ mod tests {
                 totals: Summary::default(),
             }],
             cargo_llvm_cov: None,
+        };
+
+        assert_eq!(expect, serde_json::from_value::<JsonExport>(input).unwrap());
+    }
+
+    #[test]
+    fn cargo_llvm_cov() {
+        let input = json! {{
+            "version": "2.0.0",
+            "type": "llvm.coverage.json.export",
+            "data": [{
+                "files": [],
+                "functions": [],
+                "totals": {
+                    "lines": {
+                        "count": 0,
+                        "covered": 0,
+                        "percent": 0.0
+                    },
+                    "functions": {
+                        "count": 0,
+                        "covered": 0,
+                        "percent": 0.0
+                    },
+                    "instantiations": {
+                        "count": 0,
+                        "covered": 0,
+                        "percent": 0.0
+                    },
+                    "regions": {
+                        "count": 0,
+                        "covered": 0,
+                        "notcovered": 0,
+                        "percent": 0.0
+                    },
+                    "branches": {
+                        "count": 0,
+                        "covered": 0,
+                        "notcovered": 0,
+                        "percent": 0.0
+                    }
+                }
+            }],
+            "cargo_llvm_cov": {
+                "version": "0.5.33",
+                "manifest_path": "/home/me/llvm-cov-pretty/Cargo.toml"
+            }
+        }};
+        let expect = JsonExport {
+            version: "2.0.0".to_owned(),
+            ty: "llvm.coverage.json.export".to_owned(),
+            data: [Export {
+                files: vec![],
+                functions: vec![],
+                totals: Summary::default(),
+            }],
+            cargo_llvm_cov: Some(CargoLlvmCov {
+                version: Version::new(0, 5, 33),
+                manifest_path: Utf8PathBuf::from("/home/me/llvm-cov-pretty/Cargo.toml"),
+            }),
         };
 
         assert_eq!(expect, serde_json::from_value::<JsonExport>(input).unwrap());
