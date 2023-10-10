@@ -5,6 +5,15 @@ All notable changes to this project will be documented in this file.
 <!-- markdownlint-disable no-duplicate-header -->
 <!-- markdownlint-disable no-trailing-spaces -->
 
+## [0.1.9](https://github.com/dnaka91/llvm-cov-pretty/compare/v0.1.8...v0.1.9) - 2023-10-10
+
+### <!-- 1 -->🐛 Bug Fixes
+
+- Remove non-existing extra schema fields ([d9e67b7](https://github.com/dnaka91/llvm-cov-pretty/commit/d9e67b762936b62d132ac5bbee9fee7b01d9fa6d))
+  > These extra fields that `cargo-llvm-cov` adds were originally considered
+  > but never actually made it in the schema. Thus, they cause the schema
+  > parsing to fail.
+
 ## [0.1.8](https://github.com/dnaka91/llvm-cov-pretty/compare/v0.1.7...v0.1.8) - 2023-10-06
 
 ### <!-- 0 -->⛰️ Features
