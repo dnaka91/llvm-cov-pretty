@@ -337,9 +337,8 @@ mod tests {
     use semver::Version;
     use serde_json::json;
 
-    use crate::schema::CargoLlvmCov;
-
     use super::{Export, File, Function, JsonExport, Region, RegionKind, Segment, Summary};
+    use crate::schema::CargoLlvmCov;
 
     #[test]
     fn minimum() {
