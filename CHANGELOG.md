@@ -6,6 +6,13 @@ All notable changes to this project will be documented in this file.
 <!-- markdownlint-disable no-trailing-spaces -->
 ## Unreleased
 
+### 📚 Documentation
+
+- Strip unneeded comments from the CHANGELOG.md ([0c07a20](https://github.com/dnaka91/llvm-cov-pretty/commit/0c07a206b10c6263b63a224d5315f8b2e5fe74bc))
+  > All headers are prefixed with a `<!-- [number] -->` HTML comment to
+  > enforce certain ordering of change categories. But these are not needed
+  > for anything but initial sorting and can be stripped.
+
 ### ⚙️ Miscellaneous Tasks
 
 - Bump actions/setup-node to v4 ([83fed52](https://github.com/dnaka91/llvm-cov-pretty/commit/83fed5275c8cedb9743a66a40463c03275dd150a))

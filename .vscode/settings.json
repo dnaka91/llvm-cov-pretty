@@ -1,0 +1,16 @@
+{
+  "editor.quickSuggestions": {
+    "comments": "on",
+    "other": "on",
+    "strings": "on"
+  },
+  "files.associations": {
+    "**/templates/**/*.html": "jinja-html",
+    "*.css": "tailwindcss",
+    "*.tmTheme": "xml"
+  },
+  "git.detectSubmodules": false,
+  "tailwindCSS.includeLanguages": {
+    "jinja-html": "html"
+  }
+}

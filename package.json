@@ -11,6 +11,6 @@
     "build": "pnpm run tailwind --minify"
   },
   "devDependencies": {
-    "tailwindcss": "^3.3.3"
+    "tailwindcss": "^3.4.1"
   }
 }

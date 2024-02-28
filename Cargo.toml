@@ -26,26 +26,26 @@ include = [
 ]
 
 [dependencies]
-askama = { version = "0.12.0", default-features = false }
+askama = { version = "0.12.1", default-features = false }
 askama_escape = "0.10.3"
 camino = { version = "1.1.6", features = ["serde1"] }
-clap = { version = "4.4.4", features = ["derive", "wrap_help"] }
-clap_complete = "4.4.1"
-clap_mangen = "0.2.14"
+clap = { version = "4.5.1", features = ["derive", "wrap_help"] }
+clap_complete = "4.5.1"
+clap_mangen = "0.2.20"
 color-eyre = { version = "0.6.2", default-features = false }
-ignore = "0.4.20"
-minify-html = "0.11.1"
-open = "5.0.0"
-rayon = "1.8.0"
+ignore = "0.4.22"
+minify-html = "0.15.0"
+open = "5.0.2"
+rayon = "1.9.0"
 rustc-demangle = "0.1.23"
-semver = { version = "1.0.19", features = ["serde"] }
-serde = { version = "1.0.188", features = ["derive"] }
-serde_json = "1.0.107"
-serde_path_to_error = "0.1.14"
-time = { version = "0.3.29", features = ["formatting", "local-offset", "macros"] }
+semver = { version = "1.0.22", features = ["serde"] }
+serde = { version = "1.0.197", features = ["derive"] }
+serde_json = "1.0.114"
+serde_path_to_error = "0.1.15"
+time = { version = "0.3.34", features = ["formatting", "local-offset", "macros"] }
 
 [dependencies.syntect]
-version = "5.1.0"
+version = "5.2.0"
 default-features = false
 features = ["default-syntaxes", "parsing", "regex-fancy"]
 
@@ -55,10 +55,10 @@ indoc = "2.0.4"
 [build-dependencies]
 css-minify = "0.3.1"
 heck = "0.4.1"
-quote = "1.0.33"
+quote = "1.0.35"
 
 [build-dependencies.syntect]
-version = "5.1.0"
+version = "5.2.0"
 default-features = false
 features = ["default-themes", "html", "plist-load", "regex-fancy"]
 
