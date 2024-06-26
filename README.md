@@ -4,7 +4,7 @@ More beautiful HTML reports for `llvm-cov` ([cargo-llvm-cov](https://github.com/
 
 - Dark theme support (switches automatically based on your browser setting).
 - Syntax highlighting.
-- Reduced clutter from instantiation annotations.\
+- Reduced clutter from instantiation annotations.
 - More colors, because why not.
 - Progress bars (like in grcov).
 
