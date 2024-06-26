@@ -64,7 +64,7 @@ pub struct Source<'a> {
     pub info: &'a FileInfo,
     pub coverage_style: CoverageStyle,
     pub show_instantiations: bool,
-    pub overlay_instantations: bool,
+    pub overlay_instantiations: bool,
 }
 
 impl<'a> Source<'a> {
@@ -81,7 +81,7 @@ impl<'a> Source<'a> {
             .map(|count| {
                 // Even though the line is covered, we might have a part of it that is not covered.
                 // We keep the original coverage count but still mark it as uncovered.
-                if self.overlay_instantations && self.info.uncalled.contains_key(index) {
+                if self.overlay_instantiations && self.info.uncalled.contains_key(index) {
                     Coverage::Uncovered(count)
                 } else {
                     Coverage::Covered(count)
@@ -195,7 +195,7 @@ mod tests {
             },
             coverage_style: CoverageStyle::Line,
             show_instantiations: true,
-            overlay_instantations: true,
+            overlay_instantiations: true,
         }
         .render()
         .unwrap();
