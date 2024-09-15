@@ -13,9 +13,11 @@ use serde::Deserialize;
 pub struct JsonExport {
     /// (Likely) semantic version of the export format. We don't check this field, but it should be
     /// at least `2.0.0`.
+    #[allow(dead_code)]
     pub version: String,
     /// Type of export information contained in the `data` field. We don't check this field, but it
     /// should always be `llvm.coverage.json.export`.
+    #[allow(dead_code)]
     #[serde(rename = "type")]
     pub ty: String,
     /// The actual export data. It seems to always be exactly one entry in an array.
@@ -77,12 +79,14 @@ pub struct File {
     /// **Note:** Appears to be unused for Rust projects (as branch coverage support is still
     /// experimental).
     #[serde(default)]
+    #[allow(dead_code)]
     pub branches: Vec<BranchRegion>,
     /// Coverage for code expansions caused by generics or templates. For example, structs with
     /// generic arguments that get expanded into concrete versions for specific types.
     ///
     /// **Note:** Appears to be unused for Rust projects.
     #[serde(default)]
+    #[allow(dead_code)]
     pub expansions: Vec<Expansion>,
     /// Coverage statistics summed up for the entire file.
     pub summary: Summary,
@@ -91,6 +95,7 @@ pub struct File {
 #[cfg_attr(test, derive(Debug, PartialEq))]
 pub struct Segment {
     pub line: u64,
+    #[allow(dead_code)]
     pub col: u64,
     pub count: u64,
     pub has_count: bool,
@@ -137,10 +142,12 @@ pub struct Function {
     #[serde(with = "demangle")]
     pub name: String,
     /// Total invocation count for the function.
+    #[allow(dead_code)]
     pub count: u64,
     /// Source code regions where the function call happened (or is missing).
     pub regions: Vec<Region>,
     /// Similar to [`File::branches`], but for functions.
+    #[allow(dead_code)]
     pub branches: Vec<BranchRegion>,
     /// Files in which this function is defined.
     ///
@@ -158,9 +165,12 @@ pub struct Region {
     /// How many times the function was executed in this region.
     pub execution_count: u64,
     /// Unique identifier for the file, but appears to be always `0`.
+    #[allow(dead_code)]
     pub file_id: u64,
     /// Unique identifier for the expanded file, but appears to be always `0`.
+    #[allow(dead_code)]
     pub expanded_file_id: u64,
+    #[allow(dead_code)]
     pub kind: RegionKind,
 }
 
@@ -176,6 +186,7 @@ pub enum RegionKind {
     Gap,
     Branch,
     /// Fallback value for any unsupported future variants.
+    #[allow(dead_code)]
     Unknown(u8),
 }
 
@@ -205,6 +216,7 @@ impl<'de> Deserialize<'de> for Region {
     }
 }
 
+#[allow(dead_code)]
 #[cfg_attr(test, derive(Debug, PartialEq))]
 pub struct BranchRegion {
     pub line_start: u64,
@@ -247,6 +259,7 @@ impl<'de> Deserialize<'de> for BranchRegion {
     }
 }
 
+#[allow(dead_code)]
 #[derive(Deserialize)]
 #[cfg_attr(test, derive(Debug, PartialEq))]
 pub struct Expansion {
@@ -261,8 +274,10 @@ pub struct Expansion {
 pub struct Summary {
     pub lines: CoverageCounts,
     pub functions: CoverageCounts,
+    #[allow(dead_code)]
     pub instantiations: CoverageCounts,
     pub regions: CoverageCounts2,
+    #[allow(dead_code)]
     pub branches: CoverageCounts2,
 }
 
@@ -282,6 +297,7 @@ pub struct CoverageCounts {
 pub struct CoverageCounts2 {
     pub count: u64,
     pub covered: u64,
+    #[allow(dead_code)]
     pub notcovered: u64,
     pub percent: f64,
 }

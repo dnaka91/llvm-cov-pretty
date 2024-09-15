@@ -38,7 +38,7 @@ pub struct Cli {
     /// `<CARGO_TARGET_DIR>` is the output directory as configured for Cargo. This directory can be
     /// influenced by various settings for Cargo as described here:
     ///
-    /// https://doc.rust-lang.org/cargo/reference/config.html#buildtarget-dir
+    /// <https://doc.rust-lang.org/cargo/reference/config.html#buildtarget-dir>
     #[arg(long, value_hint = ValueHint::DirPath, value_name = "PATH")]
     pub output_dir: Option<Utf8PathBuf>,
     /// Open the report in the default application after it's been generated.
