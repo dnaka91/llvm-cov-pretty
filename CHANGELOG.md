@@ -33,7 +33,7 @@ All notable changes to this project will be documented in this file.
 - Allow to control the report's output directory ([458ede9](https://github.com/dnaka91/llvm-cov-pretty/commit/458ede98a235693ef7af80d913a744587b9e29d3))
   > A new CLI flag that allows to save the report to a user-defined
   > directory instead of the default `target/llvm-cov-pretty` location.
-  > 
+  >
   > Caution should be taken as there is no additional logic for non-empty
   > directories. The target directory will be fully wiped in the process of
   > generating the report, without prior confirmation.
@@ -47,7 +47,7 @@ All notable changes to this project will be documented in this file.
 - Set link for first uncovered line ([481434a](https://github.com/dnaka91/llvm-cov-pretty/commit/481434a271553ce5fea32bb1efe442a46611776b))
   > A link tag existed that should move to the first uncovered line in
   > source view, but it never contained a proper working URL.
-  > 
+  >
   > Also, the link won't be generated anymore if there aren't any uncovered
   > lines in the file.
 
@@ -76,7 +76,7 @@ All notable changes to this project will be documented in this file.
   > A new flag that allows to opt-out of utilizing the function coverage
   > information in the source view. That means only basic file coverage will
   > be used if this flag is used.
-  > 
+  >
   > Overview pages will still show the function coverage percentages
   > accordingly, regardless of the flag.
 
@@ -140,9 +140,9 @@ All notable changes to this project will be documented in this file.
 
 - Cover the full line range of instantiation data ([9303b6b](https://github.com/dnaka91/llvm-cov-pretty/commit/9303b6b827d40e643ed5e00ec04afef0324f3d4f))
   > At first, it looked like the instantiation coverage always defines a
-  > single line, but as it turns out there are cases where it streches over
+  > single line, but as it turns out there are cases where it stretches over
   > more than one line.
-  > 
+  >
   > This data must be included to properly display the overrides for
   > uncovered instantiations.
 
@@ -152,7 +152,7 @@ All notable changes to this project will be documented in this file.
 
 - Improve error messages, especially external tool checks ([3788323](https://github.com/dnaka91/llvm-cov-pretty/commit/378832381d58ef6a43e755c90a94d34a26f6d2fb))
 - Allow manually defining the project's manifest path ([5d972b8](https://github.com/dnaka91/llvm-cov-pretty/commit/5d972b8e00e5d337d30abfa0a3e875723b593bf2))
-- Make annotations for missing instantations opt-in ([d798f5a](https://github.com/dnaka91/llvm-cov-pretty/commit/d798f5ae7196174680d3187eb6d16ae17529a0db))
+- Make annotations for missing instantiations opt-in ([d798f5a](https://github.com/dnaka91/llvm-cov-pretty/commit/d798f5ae7196174680d3187eb6d16ae17529a0db))
 - Ensure files lists are always sorted alphabetically ([2b898f8](https://github.com/dnaka91/llvm-cov-pretty/commit/2b898f8181b5ce5d318e2f3e3625a93d53aa4ea8))
 - Add option to only highlight the gutter for coverage info ([97b359c](https://github.com/dnaka91/llvm-cov-pretty/commit/97b359c08a46a96e33cab6197ba706c865987822))
 
